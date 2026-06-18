@@ -4,6 +4,12 @@
 
 > 当前仓库是**前端原型**，演示核心阅读体验。后端（登录、段评落库、实时在场）尚未接入，见下方「路线图」。
 
+## 项目文档
+
+- [`docs/PRD.md`](docs/PRD.md) — 产品需求文档（愿景、用户、功能优先级、指标、风险）
+- [`docs/TECH-SPEC.md`](docs/TECH-SPEC.md) — 技术规约（架构、前后端+存储拆分、关键技术方案、合规、扩展路径）
+- [`supabase/schema.sql`](supabase/schema.sql) — 数据库 schema，可直接在 Supabase SQL Editor 执行
+
 ## 运行
 
 ```bash
