@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#f4ecd8"/>
+  <!-- divided line: opinion vs knowledge -->
+  <rect x="80" y="260" width="300" height="60" fill="#d4c4a8" opacity="0.4"/>
+  <rect x="380" y="260" width="340" height="60" fill="#e0a24e" opacity="0.2"/>
+  <line x1="80" y1="260" x2="720" y2="260" stroke="#5b4636" stroke-width="2"/>
+  <line x1="80" y1="320" x2="720" y2="320" stroke="#5b4636" stroke-width="2"/>
+  <line x1="380" y1="260" x2="380" y2="320" stroke="#5b4636" stroke-width="2"/>
+  <!-- sun of the good -->
+  <circle cx="600" cy="130" r="60" fill="#e0a24e" opacity="0.2"/>
+  <circle cx="600" cy="130" r="36" fill="#e0a24e" opacity="0.35"/>
+  <g stroke="#b8860b" stroke-width="2" fill="none" opacity="0.7">
+    <line x1="600" y1="40" x2="600" y2="75"/>
+    <line x1="600" y1="185" x2="600" y2="220"/>
+    <line x1="510" y1="130" x2="545" y2="130"/>
+    <line x1="655" y1="130" x2="690" y2="130"/>
+    <line x1="535" y1="65" x2="560" y2="90"/>
+    <line x1="640" y1="170" x2="665" y2="195"/>
+    <line x1="665" y1="65" x2="640" y2="90"/>
+    <line x1="560" y1="170" x2="535" y2="195"/>
+  </g>
+  <!-- eye of the soul -->
+  <g transform="translate(230,120)">
+    <ellipse cx="0" cy="0" rx="50" ry="28" fill="#f4ecd8" stroke="#5b4636" stroke-width="2"/>
+    <circle cx="0" cy="0" r="18" fill="#3b332b"/>
+    <circle cx="6" cy="-6" r="6" fill="#e8ddcd"/>
+  </g>
+  <text x="230" y="290" text-anchor="middle" font-family="Georgia,'Noto Serif SC',serif" font-size="13" fill="#3b332b">意见世界</text>
+  <text x="550" y="290" text-anchor="middle" font-family="Georgia,'Noto Serif SC',serif" font-size="13" fill="#3b332b">知识世界</text>
+  <text x="400" y="370" text-anchor="middle" font-family="Georgia,'Noto Serif SC',serif" font-size="14" fill="#5b4636" opacity="0.7">善的理型：给可知世界以光，给认识能力以视力</text>
+</svg>

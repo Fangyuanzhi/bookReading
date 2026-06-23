@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: peidu-postgres
+    environment:
+      POSTGRES_DB: peidu
+      POSTGRES_USER: peidu
+      POSTGRES_PASSWORD: peidu123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U peidu -d peidu"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: peidu-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: peidu-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: peidu
+      MINIO_ROOT_PASSWORD: peidu123456
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    container_name: peidu-centrifugo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./centrifugo.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 后端服务 (开发时可选，也可以本地运行)
+  # api:
+  #   build: .
+  #   container_name: peidu-api
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - CONFIG_PATH=/app/config.yaml
+  #   volumes:
+  #     - ./config.yaml:/app/config.yaml
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     minio:
+  #       condition: service_healthy
+  #     centrifugo:
+  #       condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

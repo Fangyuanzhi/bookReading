@@ -1,0 +1,45 @@
+app:
+  name: "陪读后端"
+  version: "1.0.0"
+  port: 8080
+  mode: "release"
+
+jwt:
+  secret: ${JWT_SECRET:-change-this-secret-in-production}
+  expire_hours: 168
+
+log:
+  level: "info"
+  format: "json"
+
+database:
+  host: "postgres"
+  port: 5432
+  user: "peidu"
+  password: ${DB_PASSWORD:-peidu123}
+  dbname: "peidu"
+  sslmode: "disable"
+  max_open_conns: 25
+  max_idle_conns: 5
+
+redis:
+  host: "redis"
+  port: 6379
+  password: ""
+  db: 0
+
+minio:
+  endpoint: "minio:9000"
+  access_key: ${MINIO_ACCESS_KEY:-peidu}
+  secret_key: ${MINIO_SECRET_KEY:-peidu123456}
+  use_ssl: false
+  bucket: "bookreading"
+
+centrifugo:
+  api_url: "http://centrifugo:8000/api"
+  api_key: ${CENTRIFUGO_API_KEY:-demo-api-key}
+  ws_url: "ws://centrifugo:8000/connection/websocket"
+
+rate_limit:
+  requests_per_second: 10
+  burst: 20

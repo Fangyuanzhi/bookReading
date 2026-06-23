@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a6fa5"/><stop offset="1" stop-color="#2a3b55"/></linearGradient></defs>
+  <rect width="800" height="400" fill="#f4ecd8"/>
+  <!-- cave mouth -->
+  <path d="M50 400 L120 120 Q400 -20 680 120 L750 400 Z" fill="#3b2e26" opacity="0.9"/>
+  <path d="M120 120 Q400 40 680 120" fill="url(#sky)" opacity="0.6"/>
+  <!-- prisoners -->
+  <g fill="#5b4636">
+    <circle cx="240" cy="260" r="14"/><rect x="228" y="274" width="24" height="46" rx="6"/>
+    <circle cx="320" cy="260" r="14"/><rect x="308" y="274" width="24" height="46" rx="6"/>
+    <circle cx="400" cy="260" r="14"/><rect x="388" y="274" width="24" height="46" rx="6"/>
+  </g>
+  <!-- shadows on wall -->
+  <ellipse cx="620" cy="180" rx="70" ry="12" fill="#2a201b" opacity="0.18"/>
+  <ellipse cx="560" cy="240" rx="90" ry="16" fill="#2a201b" opacity="0.14"/>
+  <!-- fire -->
+  <path d="M180 340 Q200 280 220 340 Q200 360 180 340" fill="#e0a24e" opacity="0.6"/>
+  <!-- freed man walking toward light -->
+  <g fill="#8b5a2b">
+    <circle cx="500" cy="200" r="11"/><rect x="490" y="212" width="20" height="40" rx="5"/>
+    <path d="M500 212 L530 190" stroke="#8b5a2b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="400" y="380" text-anchor="middle" font-family="Georgia,'Noto Serif SC',serif" font-size="14" fill="#5b4636" opacity="0.7">洞穴寓言：从影子走向理念之光</text>
+</svg>

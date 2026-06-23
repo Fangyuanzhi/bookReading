@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: peidu-postgres-prod
+    environment:
+      POSTGRES_DB: peidu
+      POSTGRES_USER: peidu
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-peidu123}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - peidu-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U peidu -d peidu"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: peidu-redis-prod
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - peidu-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    container_name: peidu-centrifugo-prod
+    volumes:
+      - ./centrifugo.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    networks:
+      - peidu-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: peidu-api-prod
+    ports:
+      - "8080:8080"
+    environment:
+      - CONFIG_PATH=/app/config.yaml
+      - GIN_MODE=release
+    volumes:
+      - ./config.prod.yaml:/app/config.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      centrifugo:
+        condition: service_healthy
+    networks:
+      - peidu-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  peidu-network:
+    driver: bridge

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a1e1a"/>
+      <stop offset="1" stop-color="#0f0b0a"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0.5" cy="0.35" r="0.8">
+      <stop offset="0" stop-color="#e8b668" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#e8b668" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.45"/></filter>
+  </defs>
+  <rect width="600" height="900" fill="url(#g)"/>
+  <rect width="600" height="900" fill="url(#r)"/>
+  <!-- top/bottom frames -->
+  <rect x="36" y="36" width="528" height="828" fill="none" stroke="#c9a66b" stroke-width="2" opacity="0.55"/>
+  <rect x="48" y="48" width="504" height="804" fill="none" stroke="#c9a66b" stroke-width="1" opacity="0.28"/>
+  <!-- decorative acanthus corners -->
+  <path d="M36 180 Q36 36 180 36" fill="none" stroke="#c9a66b" stroke-width="3" opacity="0.5"/>
+  <path d="M564 180 Q564 36 420 36" fill="none" stroke="#c9a66b" stroke-width="3" opacity="0.5"/>
+  <path d="M36 720 Q36 864 180 864" fill="none" stroke="#c9a66b" stroke-width="3" opacity="0.5"/>
+  <path d="M564 720 Q564 864 420 864" fill="none" stroke="#c9a66b" stroke-width="3" opacity="0.5"/>
+  <!-- central emblem: polis/sun -->
+  <circle cx="300" cy="320" r="120" fill="none" stroke="#e0a24e" stroke-width="2" opacity="0.85"/>
+  <circle cx="300" cy="320" r="92" fill="none" stroke="#e0a24e" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="300" cy="320" r="44" fill="#e0a24e" opacity="0.18"/>
+  <g stroke="#e0a24e" stroke-width="2" opacity="0.75" fill="none">
+    <line x1="300" y1="140" x2="300" y2="200"/>
+    <line x1="300" y1="440" x2="300" y2="500"/>
+    <line x1="120" y1="320" x2="180" y2="320"/>
+    <line x1="420" y1="320" x2="480" y2="320"/>
+    <line x1="174" y1="194" x2="216" y2="236"/>
+    <line x1="384" y1="404" x2="426" y2="446"/>
+    <line x1="426" y1="194" x2="384" y2="236"/>
+    <line x1="216" y1="404" x2="174" y2="446"/>
+  </g>
+  <!-- tiny figures around the sun -->
+  <circle cx="300" cy="190" r="5" fill="#c9a66b" opacity="0.7"/>
+  <circle cx="410" cy="320" r="5" fill="#c9a66b" opacity="0.7"/>
+  <circle cx="300" cy="450" r="5" fill="#c9a66b" opacity="0.7"/>
+  <circle cx="190" cy="320" r="5" fill="#c9a66b" opacity="0.7"/>
+  <text x="300" y="620" text-anchor="middle" font-family="Georgia, 'Noto Serif SC', serif" font-size="64" fill="#e8ddcd" letter-spacing="6" filter="url(#sh)">理想国</text>
+  <text x="300" y="680" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#c9a66b" letter-spacing="4" opacity="0.8">PLATO · THE REPUBLIC</text>
+  <text x="300" y="810" text-anchor="middle" font-family="Georgia, 'Noto Serif SC', serif" font-size="20" fill="#8c7e70" letter-spacing="2">柏拉图 著</text>
+</svg>

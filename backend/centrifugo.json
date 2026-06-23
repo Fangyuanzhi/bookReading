@@ -1,0 +1,19 @@
+{
+  "token_hmac_secret_key": "your-secret-key-for-jwt-tokens",
+  "admin_password": "admin-password",
+  "admin_secret": "admin-secret",
+  "api_key": "demo-api-key",
+  "allowed_origins": ["*"],
+  "allow_anonymous_connect": true,
+  "allow_subscribe_for_client": true,
+  "allow_publish_for_client": false,
+  "namespaces": [
+    {
+      "name": "chapter",
+      "presence": true,
+      "join_leave": true,
+      "allow_subscribe_for_client": true,
+      "allow_publish_for_client": false
+    }
+  ]
+}
