@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#f4ecd8"/>
+  <!-- cosmos / spindle of necessity -->
+  <g transform="translate(400,190)">
+    <circle cx="0" cy="0" r="90" fill="none" stroke="#5b4636" stroke-width="2" opacity="0.4"/>
+    <circle cx="0" cy="0" r="60" fill="none" stroke="#5b4636" stroke-width="1.5" opacity="0.35"/>
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#5b4636" stroke-width="1" opacity="0.3"/>
+    <!-- souls choosing lots -->
+    <g fill="#3b332b" opacity="0.75">
+      <circle cx="0" cy="-115" r="9"/><rect x="-7" y="-106" width="14" height="28" rx="4"/>
+      <circle cx="100" cy="-50" r="9"/><rect x="93" y="-41" width="14" height="28" rx="4"/>
+      <circle cx="100" cy="50" r="9"/><rect x="93" y="59" width="14" height="28" rx="4"/>
+      <circle cx="0" cy="115" r="9"/><rect x="-7" y="124" width="14" height="28" rx="4"/>
+      <circle cx="-100" cy="50" r="9"/><rect x="-107" y="59" width="14" height="28" rx="4"/>
+      <circle cx="-100" cy="-50" r="9"/><rect x="-107" y="-41" width="14" height="28" rx="4"/>
+    </g>
+    <!-- central spindle -->
+    <line x1="0" y1="-120" x2="0" y2="120" stroke="#b8860b" stroke-width="3" opacity="0.7"/>
+  </g>
+  <!-- theater mask / poetry -->
+  <g transform="translate(680,110)" opacity="0.6">
+    <circle cx="0" cy="0" r="35" fill="none" stroke="#5b4636" stroke-width="2"/>
+    <path d="M-18 -5 Q-10 8 0 -5 Q10 8 18 -5" fill="none" stroke="#5b4636" stroke-width="1.5"/>
+    <circle cx="-12" cy="-12" r="4" fill="#5b4636"/>
+    <circle cx="12" cy="-12" r="4" fill="#5b4636"/>
+  </g>
+  <text x="400" y="370" text-anchor="middle" font-family="Georgia,'Noto Serif SC',serif" font-size="14" fill="#5b4636" opacity="0.75">第十卷：模仿诗批判与厄尔神话——死后灵魂的抉择</text>
+</svg>

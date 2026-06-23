@@ -4,20 +4,20 @@
  */
 
 const DECORATIONS = {
-  // 理想国（柏拉图）默认插画映射
+  // 理想国（柏拉图）默认插画映射：每卷一幅主题插画
   republic: {
     cover: '/covers/republic.svg',
     illustrations: {
-      1: '/illustrations/city.svg',
-      2: '/illustrations/city.svg',
-      3: '/illustrations/city.svg',
-      4: '/illustrations/city.svg',
-      5: '/illustrations/sun.svg',
-      6: '/illustrations/sun.svg',
-      7: '/illustrations/cave.svg',
-      8: '/illustrations/city.svg',
-      9: '/illustrations/chariot.svg',
-      10: '/illustrations/bed.svg',
+      1: '/illustrations/b1_piraeus.svg',
+      2: '/illustrations/b2_citybirth.svg',
+      3: '/illustrations/b3_muses.svg',
+      4: '/illustrations/b4_virtues.svg',
+      5: '/illustrations/b5_guardians.svg',
+      6: '/illustrations/b6_dividedline.svg',
+      7: '/illustrations/b7_cave.svg',
+      8: '/illustrations/b8_regimes.svg',
+      9: '/illustrations/b9_tyrant.svg',
+      10: '/illustrations/b10_mythofer.svg',
     },
   },
 };

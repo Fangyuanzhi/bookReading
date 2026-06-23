@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#f4ecd8"/>
+  <!-- cave -->
+  <path d="M40 400 L100 120 Q400 -40 700 120 L760 400 Z" fill="#3b2e26" opacity="0.88"/>
+  <!-- outside sky visible through mouth -->
+  <path d="M100 120 Q400 40 700 120 Q400 200 100 120" fill="#87ceeb" opacity="0.35"/>
+  <!-- fire -->
+  <path d="M180 320 Q200 250 220 320 Q200 345 180 320" fill="#e0a24e" opacity="0.5"/>
+  <!-- prisoners chained -->
+  <g fill="#8c7e70">
+    <circle cx="260" cy="250" r="12"/><rect x="250" y="264" width="20" height="40" rx="5"/>
+    <circle cx="320" cy="250" r="12"/><rect x="310" y="264" width="20" height="40" rx="5"/>
+    <circle cx="380" cy="250" r="12"/><rect x="370" y="264" width="20" height="40" rx="5"/>
+  </g>
+  <!-- shadows -->
+  <ellipse cx="580" cy="180" rx="80" ry="14" fill="#000" opacity="0.12"/>
+  <ellipse cx="520" cy="240" rx="100" ry="18" fill="#000" opacity="0.1"/>
+  <!-- freed prisoner climbing -->
+  <g fill="#b8860b">
+    <circle cx="500" cy="170" r="11"/><rect x="490" y="182" width="20" height="40" rx="5"/>
+    <path d="M500 200 L540 150" stroke="#b8860b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="400" y="375" text-anchor="middle" font-family="Georgia,'Noto Serif SC',serif" font-size="14" fill="#5b4636" opacity="0.75">第七卷：洞穴寓言——灵魂转向与启蒙</text>
+</svg>
