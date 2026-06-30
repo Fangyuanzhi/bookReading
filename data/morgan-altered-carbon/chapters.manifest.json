@@ -1,0 +1,37 @@
+[
+  {
+    "idx": 1,
+    "filename": "01-序章.txt",
+    "title": "序章"
+  },
+  {
+    "idx": 2,
+    "filename": "02-第一部·抵达.txt",
+    "title": "第一部·抵达"
+  },
+  {
+    "idx": 3,
+    "filename": "03-第二部·反应.txt",
+    "title": "第二部·反应"
+  },
+  {
+    "idx": 4,
+    "filename": "04-第三部·结盟.txt",
+    "title": "第三部·结盟"
+  },
+  {
+    "idx": 5,
+    "filename": "05-第四部·说服.txt",
+    "title": "第四部·说服"
+  },
+  {
+    "idx": 6,
+    "filename": "06-第五部·复仇女神.txt",
+    "title": "第五部·复仇女神"
+  },
+  {
+    "idx": 7,
+    "filename": "07-尾声.txt",
+    "title": "尾声"
+  }
+]

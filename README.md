@@ -2,69 +2,86 @@
 
 一个让你感到「不是一个人在读」的小说阅读社区。和番茄、起点那种「刷文」不同，这里主打**氛围**与**陪伴**：暖光夜读的质感、可随时开关的「结伴 / 独自」、以及浮现在文字旁的他人想法。
 
-> 当前仓库是**前端原型**，演示核心阅读体验。后端（登录、段评落库、实时在场）尚未接入，见下方「路线图」。
+> 当前为 **前后端分离 MVP**：Go 后端 + React 前端，核心阅读与社交陪伴链路已打通。
 
 ## 项目文档
 
-- [`docs/PRD.md`](docs/PRD.md) — 产品需求文档（愿景、用户、功能优先级、指标、风险）
-- [`docs/TECH-SPEC.md`](docs/TECH-SPEC.md) — 技术规约（架构、前后端+存储拆分、关键技术方案、合规、扩展路径）
-- [`supabase/schema.sql`](supabase/schema.sql) — 数据库 schema，可直接在 Supabase SQL Editor 执行
+- [`docs/PRD.md`](docs/PRD.md) — 产品需求文档
+- [`docs/TECH-SPEC.md`](docs/TECH-SPEC.md) — 技术规约
+- [`backend/README.md`](backend/README.md) — 后端 API 与部署
+- [`supabase/schema.sql`](supabase/schema.sql) — 数据库 schema 参考
 
-## 运行
+## 快速开始
+
+### 1. 启动后端依赖
 
 ```bash
-npm install
-npm run dev      # 本地开发，默认 http://localhost:5173
-npm run build    # 产出生产包到 dist/
-npm run preview  # 本地预览生产包
+cd backend && docker-compose up -d
 ```
 
-需要 Node 18+。
+### 2. 启动后端 API
 
-## 这个原型展示了什么
+```bash
+cd backend && go run ./cmd/api    # → http://localhost:8080
+```
 
-- **阅读页**：暖光夜读的排版，衬线正文，舒适的中文行距。
-- **结伴 / 独自开关**（右上角）——本产品的灵魂控件。
-  - 结伴：留过想法的段落旁会亮起暖光小点，并显示「此刻 N 人和你读到这一章」。
-  - 独自：回到纯净的一个人阅读。
-- **段评 / 想法**：点开任意段落，就能看到别人在这里留下的想法，也能写下自己的（微信读书式划线想法的简化版）。
-- **章末书评**：读完一章，大家在这里写感想、互相点亮。
-- **三种氛围主题**：暮 / 纸 / 夜；字号可调。
+### 3. 启动前端
 
-示例正文《夜行书简》为原创内容，仅用于演示，规避版权问题。
+```bash
+cd frontend && npm install && npm run dev   # → http://localhost:3000
+```
+
+需要 Node 18+、Go 1.22+、Docker。
+
+## MVP 功能概览
+
+| 功能 | 状态 |
+|------|------|
+| 注册 / 登录 | ✅ |
+| 书库浏览 + 搜索 | ✅ |
+| EPUB / TXT 导入 | ✅ |
+| 阅读器（主题 / 字号 / 结伴开关） | ✅ |
+| 段评 + 实时推送（Centrifugo） | ✅ |
+| 章末书评 | ✅ |
+| 实时在场（N 人在读） | ✅ |
+| 继续阅读 / 进度记忆 | ✅ |
+| 内容举报（避风港） | ✅ |
+| 环境音（雨声 / 壁炉 / 咖啡馆） | ✅ |
+| UGC 作者后台 | ✅ |
+| 个人主页（被点亮 / 我的想法） | ✅ |
 
 ## 目录结构
 
 ```
 bookReading/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── main.jsx            # 入口
-    ├── index.css           # 全局基础样式
-    └── CompanionReader.jsx # 核心阅读组件（原型主体）
+├── backend/          # Go + Gin + PostgreSQL + Redis + Centrifugo
+├── frontend/         # Vite + React + Tailwind
+├── mobile/           # 原生 App（M4）· 商店上架素材见 store-listing/
+├── data/             # 公版书数据（如《理想国》）
+├── docs/             # PRD、技术规约
+└── supabase/         # Schema 参考
 ```
 
-## 路线图（建议的下一步）
+## 原生 App（M4）
 
-1. **先定内容来源（决定一切的岔路口）**
-   - 原创 UGC：用户自己写原创，零授权成本，最配「社区陪伴」，需破冷启动。
-   - 公版经典：版权已过期的名著，合法免费，适合「围炉夜读经典」。
-   - 正版 / 网文授权：需与出版社、平台签约，重资产，不建议起步阶段。
-   - ⚠️ 切勿直接托管盗版小说——这是会被关站的法律红线。
-2. **接后端**：推荐 Supabase（Postgres + 登录 + 实时订阅）。
-   - 「N 人在读」「实时段评」用 Supabase Realtime 直接实现，省去自建 WebSocket。
-   - 数据表草案：`users` / `books` / `chapters` / `paragraph_notes`（段评）/ `reviews`（书评）/ `reading_groups`（共读小组）。
-3. **扩成多章节 + 书架 + 路由**：可平滑迁移到 Next.js 以承载服务端逻辑。
-4. **氛围层增强**：环境音（雨声 / 壁炉 / 咖啡馆）、阅读时长陪伴、共读小组按进度同读。
+| 阶段 | 说明 |
+|------|------|
+| M4a | **Expo React Native** 登录 / 书库 / 阅读器 → [`mobile/app/`](mobile/app/) |
+| M4b | 推送 + 离线缓存 + WebSocket |
+| M4c | App Store / 应用宝上架素材 → [`mobile/store-listing/`](mobile/store-listing/) |
+
+```bash
+cd mobile && chmod +x setup-m4a.sh && ./setup-m4a.sh && cd app && npm start
+```
+
+隐私政策页：`/privacy`（商店审核必填 URL）
 
 ## 技术栈
 
-- Vite + React 18
-- lucide-react（图标）
-- 纯前端、内存态数据（刷新即重置）——便于快速预览，接后端后替换。
+**后端：** Go、Gin、GORM、PostgreSQL、Redis、Centrifugo、MinIO
+
+**前端：** Vite、React 18、Tailwind、lucide-react
 
 ## License
 
-原型代码可自由使用与修改。示例文本《夜行书简》为占位用原创内容。
+MIT。公版书籍内容请遵守相应版权协议。

@@ -90,3 +90,40 @@ func (r *UserRepository) Update(ctx context.Context, user *model.User) error {
 func (r *UserRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	return r.db.WithContext(ctx).Delete(&model.User{}, "id = ?", id).Error
 }
+
+// ActiveReaderStat 活跃读者统计
+type ActiveReaderStat struct {
+	UserID      uuid.UUID `json:"user_id"`
+	PublicNotes int64     `json:"public_notes"`
+	Reviews     int64     `json:"reviews"`
+	TotalLikes  int64     `json:"total_likes"`
+}
+
+// ListActiveReaders 按段评/书评活跃度排序的读者
+func (r *UserRepository) ListActiveReaders(ctx context.Context, limit int) ([]ActiveReaderStat, error) {
+	if limit < 1 || limit > 50 {
+		limit = 10
+	}
+	var stats []ActiveReaderStat
+	err := r.db.WithContext(ctx).Raw(`
+		SELECT p.id AS user_id,
+		       COALESCE(n.note_count, 0) AS public_notes,
+		       COALESCE(rv.review_count, 0) AS reviews,
+		       COALESCE(n.total_likes, 0) + COALESCE(rv.total_likes, 0) AS total_likes
+		FROM profiles p
+		LEFT JOIN (
+			SELECT user_id, COUNT(*) AS note_count, COALESCE(SUM(likes), 0) AS total_likes
+			FROM notes WHERE is_public = true AND deleted_at IS NULL
+			GROUP BY user_id
+		) n ON n.user_id = p.id
+		LEFT JOIN (
+			SELECT user_id, COUNT(*) AS review_count, COALESCE(SUM(likes), 0) AS total_likes
+			FROM reviews WHERE deleted_at IS NULL
+			GROUP BY user_id
+		) rv ON rv.user_id = p.id
+		WHERE COALESCE(n.note_count, 0) + COALESCE(rv.review_count, 0) > 0
+		ORDER BY total_likes DESC, public_notes DESC
+		LIMIT ?
+	`, limit).Scan(&stats).Error
+	return stats, err
+}

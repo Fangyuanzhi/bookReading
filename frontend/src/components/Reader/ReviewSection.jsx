@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
+import ReportButton from '../ReportButton';
 
 export default function ReviewSection({ theme, reviews, onSubmit, onLike, isCompanionMode }) {
   const [body, setBody] = useState('');
@@ -55,22 +57,40 @@ export default function ReviewSection({ theme, reviews, onSubmit, onLike, isComp
           reviews.map((review) => (
             <div key={review.id} className="rounded-lg p-4" style={{ backgroundColor: theme.bgRaised || theme.line }}>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-sm font-medium">
-                  {review.user?.display_name || review.user?.email || '读者'}
-                </span>
+                {review.user?.id ? (
+                  <Link
+                    to={`/users/${review.user.id}`}
+                    className="text-sm font-medium hover:underline"
+                    style={{ color: theme.accent }}
+                  >
+                    {review.user.display_name || review.user.email || '读者'}
+                  </Link>
+                ) : (
+                  <span className="text-sm font-medium">
+                    {review.user?.display_name || review.user?.email || '读者'}
+                  </span>
+                )}
                 <span className="text-xs opacity-50">
                   {review.created_at ? new Date(review.created_at).toLocaleDateString('zh-CN') : ''}
                 </span>
               </div>
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{review.body}</p>
-              <button
-                type="button"
-                onClick={() => onLike(review.id, review.has_liked)}
-                className="mt-3 flex items-center gap-1 text-xs opacity-70 hover:opacity-100"
-              >
-                <Heart size={14} fill={review.has_liked ? theme.accent : 'none'} />
-                {review.likes || 0}
-              </button>
+              <div className="mt-3 flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => onLike(review.id, review.has_liked)}
+                  className="flex items-center gap-1 text-xs opacity-70 hover:opacity-100"
+                >
+                  <Heart size={14} fill={review.has_liked ? theme.accent : 'none'} />
+                  {review.likes || 0}
+                </button>
+                <ReportButton
+                  targetType="review"
+                  targetId={review.id}
+                  label="举报"
+                  variant="ghost"
+                />
+              </div>
             </div>
           ))
         )}

@@ -11,6 +11,27 @@ export function paragraphCfi(index) {
   return `para:${index}`;
 }
 
+/** Build progress CFI with optional page index */
+export function buildProgressCfi(paragraphIndex, pageIndex) {
+  const para = Math.max(0, paragraphIndex || 0);
+  if (pageIndex != null && pageIndex > 0) {
+    return `para:${para}|page:${pageIndex}`;
+  }
+  return `para:${para}`;
+}
+
+/** Parse paragraph index from progress CFI */
+export function parseProgressCfi(cfi) {
+  const match = /^para:(\d+)/.exec(cfi || '');
+  return match ? Number(match[1]) : 0;
+}
+
+/** Parse page index from progress CFI */
+export function parseProgressPage(cfi) {
+  const match = /\|page:(\d+)/.exec(cfi || '');
+  return match ? Number(match[1]) : null;
+}
+
 /** Resolve paragraph index from CFI or text_quote fallback */
 export function noteParagraphIndex(note, paragraphs) {
   if (!note) return -1;

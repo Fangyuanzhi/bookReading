@@ -81,20 +81,31 @@ def load_chapters(book_dir: Path) -> list[dict]:
     return chapters
 
 
-def import_book(api_base: str, token: str, book_dir: Path) -> dict:
+def import_book(api_base: str, token: str, book_dir: Path, *, publish: bool) -> dict:
     manifest = load_manifest(book_dir)
     chapters = load_chapters(book_dir)
+    book_meta = manifest["book"]
+    should_publish = publish or bool(manifest.get("publish"))
 
-    book = request_json("POST", f"{api_base}/books", token=token, body=manifest["book"])
+    book = request_json("POST", f"{api_base}/books", token=token, body=book_meta)
     book_id = book["id"]
 
     request_json("POST", f"{api_base}/books/{book_id}/chapters", token=token, body=chapters)
 
+    if should_publish and book.get("status") != "published":
+        request_json(
+            "PATCH",
+            f"{api_base}/books/{book_id}/status",
+            token=token,
+            body={"status": "published"},
+        )
+
     detail = request_json("GET", f"{api_base}/books/{book_id}", token=token)
     return {
         "id": book_id,
-        "title": detail.get("title", manifest["book"].get("title")),
+        "title": detail.get("title", book_meta.get("title")),
         "chapters": len(chapters),
+        "status": detail.get("status", book.get("status")),
     }
 
 
@@ -104,6 +115,12 @@ def main() -> int:
     parser.add_argument("--api", default="http://127.0.0.1:8080/api/v1", help="API base URL")
     parser.add_argument("--email", default="importer@peidu.local", help="login email")
     parser.add_argument("--password", default="Importer123", help="login password")
+    parser.add_argument(
+        "--publish",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="publish after import (default: true; original-source books start as draft)",
+    )
     args = parser.parse_args()
 
     book_dir = args.book_dir.resolve()
@@ -113,7 +130,7 @@ def main() -> int:
 
     try:
         token = login(args.api.rstrip("/"), args.email, args.password)
-        result = import_book(args.api.rstrip("/"), token, book_dir)
+        result = import_book(args.api.rstrip("/"), token, book_dir, publish=args.publish)
     except Exception as exc:  # noqa: BLE001 - CLI tool
         print(f"error: {exc}", file=sys.stderr)
         return 1

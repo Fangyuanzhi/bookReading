@@ -52,6 +52,10 @@ func main() {
 		logger.Int("port", cfg.App.Port),
 	)
 
+	if cfg.App.Mode == "release" && (cfg.JWT.Secret == "" || cfg.JWT.Secret == "your-secret-key-change-in-production") {
+		logger.Warn("JWT secret is using default value; set JWT_SECRET in production")
+	}
+
 	// 初始化数据库
 	if err := database.Init(&cfg.Database, cfg.Log.Level); err != nil {
 		logger.Fatal("failed to init database", logger.Err(err))
@@ -69,6 +73,11 @@ func main() {
 	noteRepo := repository.NewNoteRepository(database.GetDB())
 	reviewRepo := repository.NewReviewRepository(database.GetDB())
 	paymentRepo := repository.NewPaymentRepository(database.GetDB())
+	progressRepo := repository.NewProgressRepository(database.GetDB())
+	reportRepo := repository.NewReportRepository(database.GetDB())
+	groupRepo := repository.NewGroupRepository(database.GetDB())
+	shelfRepo := repository.NewShelfRepository(database.GetDB())
+	followRepo := repository.NewFollowRepository(database.GetDB())
 
 	// 初始化 Redis 客户端
 	rdb := redis.NewClient(&redis.Options{
@@ -82,13 +91,19 @@ func main() {
 
 	// 初始化服务
 	authService := service.NewAuthService(userRepo, &cfg.JWT)
-	bookService := service.NewBookService(bookRepo)
+	paymentService := service.NewPaymentService(paymentRepo, bookRepo)
+	bookService := service.NewBookService(bookRepo, paymentService)
 	noteService := service.NewNoteService(noteRepo, centrifugoClient)
 	reviewService := service.NewReviewService(reviewRepo, centrifugoClient)
 	presenceService := service.NewPresenceService(rdb, centrifugoClient)
 	searchService := service.NewSearchService(bookRepo, noteRepo, reviewRepo)
 	recommendService := service.NewRecommendService(bookRepo, userRepo)
-	paymentService := service.NewPaymentService(paymentRepo, bookRepo)
+	discoverService := service.NewDiscoverService(bookRepo, noteRepo, reviewRepo, userRepo, groupRepo, recommendService)
+	progressService := service.NewProgressService(progressRepo, bookRepo)
+	reportService := service.NewReportService(reportRepo, bookRepo, noteRepo, reviewRepo)
+	groupService := service.NewGroupService(groupRepo, bookRepo)
+	shelfService := service.NewShelfService(shelfRepo, bookRepo, progressRepo, paymentService)
+	socialService := service.NewSocialService(followRepo, userRepo, noteRepo, reviewRepo)
 
 	// 初始化处理器
 	authHandler := handler.NewAuthHandler(authService)
@@ -100,7 +115,14 @@ func main() {
 	uploadHandler := handler.NewUploadHandler(bookService)
 	searchHandler := handler.NewSearchHandler(searchService)
 	recommendHandler := handler.NewRecommendHandler(recommendService)
+	discoverHandler := handler.NewDiscoverHandler(discoverService)
 	paymentHandler := handler.NewPaymentHandler(paymentService)
+	progressHandler := handler.NewProgressHandler(progressService)
+	reportHandler := handler.NewReportHandler(reportService)
+	profileHandler := handler.NewProfileHandler(noteRepo, reviewRepo, bookRepo)
+	groupHandler := handler.NewGroupHandler(groupService)
+	shelfHandler := handler.NewShelfHandler(shelfService)
+	socialHandler := handler.NewSocialHandler(socialService)
 
 	// 设置 Gin 模式
 	gin.SetMode(cfg.App.Mode)
@@ -116,7 +138,7 @@ func main() {
 	r.Use(middleware.Timeout(30 * time.Second))
 
 	// 注册路由
-	registerRoutes(r, authHandler, bookHandler, chapterHandler, noteHandler, reviewHandler, presenceHandler, uploadHandler, searchHandler, recommendHandler, paymentHandler)
+	registerRoutes(r, authHandler, bookHandler, chapterHandler, noteHandler, reviewHandler, presenceHandler, uploadHandler, searchHandler, recommendHandler, discoverHandler, paymentHandler, progressHandler, reportHandler, profileHandler, groupHandler, shelfHandler, socialHandler)
 
 	// 创建 HTTP 服务器
 	srv := &http.Server{
@@ -151,7 +173,7 @@ func main() {
 }
 
 // registerRoutes 注册路由
-func registerRoutes(r *gin.Engine, authHandler *handler.AuthHandler, bookHandler *handler.BookHandler, chapterHandler *handler.ChapterHandler, noteHandler *handler.NoteHandler, reviewHandler *handler.ReviewHandler, presenceHandler *handler.PresenceHandler, uploadHandler *handler.UploadHandler, searchHandler *handler.SearchHandler, recommendHandler *handler.RecommendHandler, paymentHandler *handler.PaymentHandler) {
+func registerRoutes(r *gin.Engine, authHandler *handler.AuthHandler, bookHandler *handler.BookHandler, chapterHandler *handler.ChapterHandler, noteHandler *handler.NoteHandler, reviewHandler *handler.ReviewHandler, presenceHandler *handler.PresenceHandler, uploadHandler *handler.UploadHandler, searchHandler *handler.SearchHandler, recommendHandler *handler.RecommendHandler, discoverHandler *handler.DiscoverHandler, paymentHandler *handler.PaymentHandler, progressHandler *handler.ProgressHandler, reportHandler *handler.ReportHandler, profileHandler *handler.ProfileHandler, groupHandler *handler.GroupHandler, shelfHandler *handler.ShelfHandler, socialHandler *handler.SocialHandler) {
 	// 健康检查
 	healthHandler := handler.NewHealthHandler()
 	r.GET("/health", healthHandler.Health)
@@ -166,25 +188,48 @@ func registerRoutes(r *gin.Engine, authHandler *handler.AuthHandler, bookHandler
 			auth.POST("/register", authHandler.Register)
 			auth.POST("/login", authHandler.Login)
 			auth.GET("/me", middleware.Auth(), authHandler.Me)
+			auth.GET("/me/stats", middleware.Auth(), profileHandler.Stats)
 		}
 
 		// 书籍相关 (Phase 3 & 5)
 		books := api.Group("/books")
 		{
+			books.GET("/mine", middleware.Auth(), bookHandler.ListMine)
 			books.GET("", bookHandler.List)
-			books.GET("/:id", bookHandler.Get)
+			books.GET("/:id", middleware.OptionalAuth(), bookHandler.Get)
 			books.POST("", middleware.Auth(), bookHandler.Create)
 			books.PUT("/:id", middleware.Auth(), bookHandler.Update)
+			books.PATCH("/:id/status", middleware.Auth(), bookHandler.UpdateStatus)
 			books.DELETE("/:id", middleware.Auth(), bookHandler.Delete)
-			books.GET("/:id/chapters", bookHandler.GetChapters)
+			books.GET("/:id/chapters", middleware.OptionalAuth(), bookHandler.GetChapters)
 			books.POST("/:id/chapters", middleware.Auth(), bookHandler.CreateChapters)
+			books.POST("/:id/chapter", middleware.Auth(), bookHandler.CreateSingleChapter)
 			books.GET("/:id/reviews", reviewHandler.ListByBook)
+			books.GET("/:id/progress", middleware.Auth(), progressHandler.GetBookProgress)
+			books.PUT("/:id/progress", middleware.Auth(), progressHandler.SaveBookProgress)
+		}
+
+		// 阅读进度
+		reading := api.Group("/reading")
+		{
+			reading.GET("/progress", middleware.Auth(), progressHandler.ListRecent)
+		}
+
+		// 书架
+		shelf := api.Group("/shelf")
+		{
+			shelf.GET("", middleware.Auth(), shelfHandler.List)
+			shelf.POST("", middleware.Auth(), shelfHandler.Add)
+			shelf.GET("/:bookId/status", middleware.Auth(), shelfHandler.Status)
+			shelf.DELETE("/:bookId", middleware.Auth(), shelfHandler.Remove)
 		}
 
 		// 章节相关 (Phase 3, 4, 5 & 6)
 		chapters := api.Group("/chapters")
 		{
-			chapters.GET("/:id", chapterHandler.Get)
+			chapters.GET("/:id", middleware.OptionalAuth(), chapterHandler.Get)
+			chapters.PUT("/:id", middleware.Auth(), chapterHandler.Update)
+			chapters.DELETE("/:id", middleware.Auth(), chapterHandler.Delete)
 			chapters.GET("/:id/notes", noteHandler.ListByChapter)
 			chapters.GET("/:id/reviews", reviewHandler.ListByChapter)
 			chapters.GET("/:id/presence", presenceHandler.GetChapterPresence)
@@ -241,12 +286,49 @@ func registerRoutes(r *gin.Engine, authHandler *handler.AuthHandler, bookHandler
 		api.GET("/recommend/trending", recommendHandler.Trending)
 		api.GET("/recommend/editor", recommendHandler.EditorPicks)
 
+		// 发现页 (M3)
+		api.GET("/discover", middleware.OptionalAuth(), discoverHandler.Feed)
+
+		// 轻社交 (M2 P1)
+		api.GET("/feed", middleware.Auth(), socialHandler.Feed)
+		users := api.Group("/users")
+		{
+			users.GET("/:id", middleware.OptionalAuth(), socialHandler.GetProfile)
+			users.POST("/:id/follow", middleware.Auth(), socialHandler.Follow)
+			users.DELETE("/:id/follow", middleware.Auth(), socialHandler.Unfollow)
+			users.GET("/:id/follow/status", middleware.Auth(), socialHandler.FollowStatus)
+			users.GET("/:id/followers", middleware.OptionalAuth(), socialHandler.ListFollowers)
+			users.GET("/:id/following", middleware.OptionalAuth(), socialHandler.ListFollowing)
+		}
+
 		// 支付相关
+		api.GET("/pricing", paymentHandler.GetPricing)
 		api.GET("/payments", middleware.Auth(), paymentHandler.ListPayments)
 		api.POST("/payments", middleware.Auth(), paymentHandler.CreatePayment)
 		api.GET("/payments/:id", middleware.Auth(), paymentHandler.GetPaymentStatus)
+		api.POST("/payments/:id/confirm", middleware.Auth(), paymentHandler.ConfirmPayment)
 		api.POST("/payments/callback/:provider", paymentHandler.PaymentCallback)
 		api.GET("/vip/status", middleware.Auth(), paymentHandler.CheckVIP)
 		api.GET("/books/access", middleware.Auth(), paymentHandler.CheckBookAccess)
+
+		// 内容举报（避风港）
+		reports := api.Group("/reports")
+		{
+			reports.POST("", middleware.Auth(), reportHandler.Create)
+		}
+
+		// 共读小组 (M3)
+		groups := api.Group("/groups")
+		{
+			groups.GET("", middleware.OptionalAuth(), groupHandler.List)
+			groups.GET("/mine", middleware.Auth(), groupHandler.ListMine)
+			groups.POST("", middleware.Auth(), groupHandler.Create)
+			groups.GET("/:id", middleware.OptionalAuth(), groupHandler.Get)
+			groups.POST("/:id/join", middleware.Auth(), groupHandler.Join)
+			groups.POST("/:id/leave", middleware.Auth(), groupHandler.Leave)
+			groups.DELETE("/:id", middleware.Auth(), groupHandler.Delete)
+			groups.GET("/:id/posts", groupHandler.ListPosts)
+			groups.POST("/:id/posts", middleware.Auth(), groupHandler.CreatePost)
+		}
 	}
 }

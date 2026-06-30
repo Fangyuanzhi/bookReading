@@ -1,0 +1,26 @@
+## App Review Notes (陪读 / Peidu 1.0)
+
+Thank you for reviewing Peidu.
+
+### Demo account
+- Email: reviewer@peidu.app
+- Password: ReviewPeidu2026!
+
+(Replace with a real staging account before submission.)
+
+### How to test core features
+1. Sign in with the demo account.
+2. Open **书库** (Home) → tap any book → **开始阅读**.
+3. In the reader, toggle **结伴/独自** in settings (gear icon).
+4. Select text → add a margin note; notes from other users appear beside paragraphs.
+5. Scroll to chapter end → post a chapter review.
+6. **发现** tab → browse recommendations and reading groups.
+7. **举报** is available on book detail and in the reader for UGC compliance.
+
+### Notes
+- The app requires network access to our API; no offline-only mode in v1.0.
+- Payments (VIP / book purchase) use mock flow in staging; production uses licensed payment SDK.
+- Privacy policy: https://peidu.app/privacy
+- We do not host pirated content; library is public-domain + user-uploaded originals with reporting.
+
+Contact: support@peidu.app

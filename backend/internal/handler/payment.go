@@ -47,11 +47,52 @@ func (h *PaymentHandler) CreatePayment(c *gin.Context) {
 
 	resp, err := h.paymentService.CreatePayment(c.Request.Context(), &req, userID)
 	if err != nil {
+		if errors.Is(err, service.ErrInvalidPaymentAmount) {
+			response.BadRequest(c, "invalid payment amount")
+			return
+		}
 		response.InternalError(c, err.Error())
 		return
 	}
 
 	response.Success(c, resp)
+}
+
+// GetPricing 获取定价方案
+func (h *PaymentHandler) GetPricing(c *gin.Context) {
+	response.Success(c, h.paymentService.GetPricing())
+}
+
+// ConfirmPayment 模拟支付确认
+func (h *PaymentHandler) ConfirmPayment(c *gin.Context) {
+	userID, err := middleware.GetCurrentUserID(c)
+	if err != nil {
+		response.Unauthorized(c, err.Error())
+		return
+	}
+
+	paymentID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.BadRequest(c, "invalid payment id")
+		return
+	}
+
+	payment, err := h.paymentService.ConfirmPayment(c.Request.Context(), paymentID, userID)
+	if err != nil {
+		switch {
+		case errors.Is(err, service.ErrPaymentNotFound):
+			response.NotFound(c, "payment not found")
+		case errors.Is(err, service.ErrPaymentUnauthorized):
+			response.Forbidden(c, "payment unauthorized")
+		case errors.Is(err, service.ErrPaymentExpired):
+			response.BadRequest(c, "payment expired")
+		default:
+			response.InternalError(c, err.Error())
+		}
+		return
+	}
+
+	response.Success(c, payment)
 }
 
 // GetPaymentStatus 获取支付状态
@@ -221,13 +262,11 @@ func (h *PaymentHandler) CheckBookAccess(c *gin.Context) {
 		return
 	}
 
-	hasAccess, err := h.paymentService.CheckUserBookAccess(c.Request.Context(), userID, bookID)
+	info, err := h.paymentService.GetBookAccessInfo(c.Request.Context(), userID, bookID)
 	if err != nil {
 		response.InternalError(c, err.Error())
 		return
 	}
 
-	response.Success(c, gin.H{
-		"has_access": hasAccess,
-	})
+	response.Success(c, info)
 }

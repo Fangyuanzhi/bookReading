@@ -1,0 +1,387 @@
+{
+  "bookKey": "republic",
+  "title": "理想国 · 世界图谱",
+  "map": {
+    "label": "希腊世界",
+    "regions": [
+      {
+        "id": "piraeus",
+        "name": "比雷埃夫斯",
+        "kind": "location",
+        "x": 58,
+        "y": 51,
+        "unlockChapter": 1,
+        "stageIntro": "雅典外港。苏格拉底与格劳孔下行赴祭，全篇对话由此启程。",
+        "detail": {
+          "summary": "比雷埃夫斯是雅典最重要的港口，距雅典城约八公里。在《理想国》中，它是叙事的真实地理锚点：对话并非发生在哲人学院的抽象空间，而是从一次下行的日常路程开始——赴港参加对本狄斯女神的祭典，随后被玻勒马霍斯「扣留」回城。",
+          "features": [
+            "海港与城邦的通道：商业、祭祀与军事物资经此出入",
+            "色雷斯人与雅典居民共同游行，体现城邦的多元与节庆政治",
+            "从港到城的路，象征从具体生活进入抽象思辨"
+          ],
+          "appearances": [
+            { "chapter": 1, "title": "第一卷", "note": "开篇下行；克法洛斯家宴；正义讨论发端" }
+          ]
+        }
+      },
+      {
+        "id": "athens",
+        "name": "雅典",
+        "kind": "location",
+        "x": 61,
+        "y": 45,
+        "unlockChapter": 1,
+        "stageIntro": "对话主要发生地。城邦正义与个人灵魂在此被反复追问。",
+        "detail": {
+          "summary": "雅典不仅是历史城邦，更是柏拉图设置的思想实验场。几乎所有核心论证——正义的定义、理想政体、灵魂三分、哲人王——都在「城邦」这一放大模型中展开。",
+          "features": [
+            "民主与修辞活跃，色拉叙马霍斯式「强者即正义」有现实土壤",
+            "与斯巴达、克里特并置，作为政体比较的参照系",
+            "城邦被视为灵魂的「放大版」，便于看见德性结构"
+          ],
+          "appearances": [
+            { "chapter": 1, "title": "第一卷", "note": "玻勒马霍斯家；克法洛斯关于老年与正义" },
+            { "chapter": 2, "title": "第二卷", "note": "格劳孔要求证明正义本身之善" },
+            { "chapter": 4, "title": "第四卷", "note": "四德在城邦与灵魂中的对应" }
+          ]
+        }
+      },
+      {
+        "id": "attica",
+        "name": "阿提卡",
+        "kind": "location",
+        "x": 66,
+        "y": 50,
+        "unlockChapter": 1,
+        "stageIntro": "雅典所在地区。连接港、城与乡野的行政与宗教空间。",
+        "detail": {
+          "summary": "阿提卡半岛是雅典城邦的本土。对话中偶尔提及的乡野、祭典与地理背景，都暗示论证并非悬浮空中，而是植根于希腊人熟悉的政治与宗教生活。",
+          "features": [
+            "半岛地形：城、港、农田与神庙构成日常视野",
+            "地方祭典（如本狄斯）嵌入叙事时间",
+            "「阿提卡」作为文化共同体，比「雅典城」更宽"
+          ],
+          "appearances": [
+            { "chapter": 1, "title": "第一卷", "note": "下行与回城路线所涉区域" }
+          ]
+        }
+      },
+      {
+        "id": "ideal-city",
+        "name": "理想城邦",
+        "kind": "concept",
+        "x": 82,
+        "y": 18,
+        "unlockChapter": 2,
+        "stageIntro": "纸上建城。分工、教育、护卫者——正义在「放大模型」中被寻找。",
+        "detail": {
+          "summary": "理想城邦是全书最重要的「虚构地理」。苏格拉底提议：先在城邦里找正义，再类比到个人灵魂。城邦从「健康城邦」到「奢侈城邦」逐步扩张，引出护卫者、哲人、共产、共妻等重大制度设计。",
+          "features": [
+            "三分社会：生产者、护卫者、统治者",
+            "音乐与体操教育塑造灵魂秩序",
+            "城邦与灵魂同构：智慧、勇敢、节制、正义四德对应"
+          ],
+          "appearances": [
+            { "chapter": 2, "title": "第二卷", "note": "建城动机；健康城邦与奢侈城邦" },
+            { "chapter": 3, "title": "第三卷", "note": "护卫者教育与诗乐审查" },
+            { "chapter": 5, "title": "第五卷", "note": "哲人王；妇女与儿童共有" }
+          ]
+        }
+      },
+      {
+        "id": "sparta",
+        "name": "斯巴达",
+        "kind": "location",
+        "x": 50,
+        "y": 68,
+        "unlockChapter": 3,
+        "stageIntro": "以纪律与军事著称的城邦，常作为雅典的对照与政体讨论的引子。",
+        "detail": {
+          "summary": "斯巴达在对话中代表荣誉与军事德性。虽非主场景，却反复出现在对政体、教育与生活制度的比较里，是理解「荣誉政体」与希腊城邦差异的关键参照。",
+          "features": [
+            "强调体操、集体生活与对战争的适应",
+            "妇女与财产制度与雅典不同，引发讨论",
+            "在政体退化序列中对应「荣誉政体」的原型"
+          ],
+          "appearances": [
+            { "chapter": 3, "title": "第三卷", "note": "教育制度比较" },
+            { "chapter": 8, "title": "第八卷", "note": "政体序列中的荣誉政体" }
+          ]
+        }
+      },
+      {
+        "id": "crete",
+        "name": "克里特",
+        "kind": "location",
+        "x": 55,
+        "y": 86,
+        "unlockChapter": 3,
+        "stageIntro": "克里特与斯巴达立法传统相连，作为「好法律」的远方例子被提及。",
+        "detail": {
+          "summary": "克里特岛在希腊世界中以古老立法与宗教传统著称。对话引用它，是为了说明：政体与教育并非雅典独有议题，整个希腊都在追问如何立法、如何生活。",
+          "features": [
+            "与斯巴达制度有历史渊源",
+            "作为「远方好例」进入论证",
+            "帮助读者把理想城邦放在泛希腊视野中"
+          ],
+          "appearances": [
+            { "chapter": 3, "title": "第三卷", "note": "立法与教育背景" }
+          ]
+        }
+      },
+      {
+        "id": "cave",
+        "name": "洞穴",
+        "kind": "concept",
+        "x": 46,
+        "y": 32,
+        "unlockChapter": 7,
+        "stageIntro": "第七卷核心寓言：囚徒、影子、火光与太阳——从意见上升到理念。",
+        "detail": {
+          "summary": "洞穴寓言是全书最著名的认知地图。被囚者只见墙影，以为那就是全部真实；解放者逐级转向火光、洞外与太阳，象征灵魂从意见（eikasia/pistis）转向知识（dianoia/noesis）。哲人王必须「再入洞穴」承担政治，是伦理上的艰难选择。",
+          "features": [
+            "四段认知等级：影像、信念、思想、理性",
+            "太阳喻「善的理念」：使可知者被认识",
+            "返回洞穴：知与行的张力，哲人为何还要统治"
+          ],
+          "appearances": [
+            { "chapter": 7, "title": "第七卷", "note": "洞穴寓言与线段划分完整呈现" }
+          ]
+        }
+      },
+      {
+        "id": "underworld",
+        "name": "下界",
+        "kind": "concept",
+        "x": 75,
+        "y": 88,
+        "unlockChapter": 1,
+        "stageIntro": "克法洛斯谈老年时对死后报偿的忧虑；第十卷灵魂审判延续此线。",
+        "detail": {
+          "summary": "「下界」在对话中连接伦理与神话：正义者是否死后得报？灵魂是否不朽？从第一卷克法洛斯的恐惧，到第十卷厄尔神话的轮回审判，构成一条关于「正义是否有终极回报」的叙事暗线。",
+          "features": [
+            "宗教信念与理性论证并行",
+            "死后奖惩影响现世的正义动机",
+            "第十卷厄尔神话：灵魂选择下一生的寓言"
+          ],
+          "appearances": [
+            { "chapter": 1, "title": "第一卷", "note": "克法洛斯论老年、欠债与祭神" },
+            { "chapter": 10, "title": "第十卷", "note": "灵魂不朽与厄尔神话" }
+          ]
+        }
+      }
+    ]
+  },
+  "characters": [
+    {
+      "id": "socrates",
+      "name": "苏格拉底",
+      "role": "主人公 / 诘问者",
+      "x": 68,
+      "y": 52,
+      "unlockChapter": 1,
+      "stageIntro": "对话中心。以提问逼出定义，很少正面下结论。",
+      "relations": [
+        { "target": "glaucon", "label": "对话者", "unlockChapter": 1 },
+        { "target": "adeimantus", "label": "对话者", "unlockChapter": 1 },
+        { "target": "thrasymachus", "label": "论敌", "unlockChapter": 1 }
+      ],
+      "detail": {
+        "summary": "柏拉图笔下的苏格拉底是哲人形象的典范：他自称无知，却通过不断提问检验他人信念；他讨论正义、德性、政体与灵魂，但往往在关键处留待进一步论证。在《理想国》中，他既是叙事者，也是理想城邦与哲人王学说的主要阐述者（虽常以「如果我们能找到」的假设语气说话）。",
+        "life": "历史上为雅典公民，以街头对话闻名，后因「腐蚀青年、不敬神」被判处死刑（见《申辩篇》）。本书记录的是其中年时期的一次长谈。",
+        "appearances": [
+          { "chapter": 1, "title": "第一卷", "note": "与克法洛斯、玻勒马霍斯、色拉叙马霍斯论正义" },
+          { "chapter": 2, "title": "第二卷", "note": "回应格劳孔挑战；提议建城" },
+          { "chapter": 7, "title": "第七卷", "note": "洞穴寓言与线段喻" },
+          { "chapter": 9, "title": "第九卷", "note": "论各类灵魂与政体的快乐" },
+          { "chapter": 10, "title": "第十卷", "note": "诗与哲学之争；厄尔神话" }
+        ]
+      }
+    },
+    {
+      "id": "glaucon",
+      "name": "格劳孔",
+      "role": "主要对话者",
+      "x": 80,
+      "y": 45,
+      "unlockChapter": 1,
+      "stageIntro": "柏拉图之兄。第二卷起提出「正义为何本身值得追求」的强硬挑战。",
+      "relations": [
+        { "target": "socrates", "label": "师友式对话", "unlockChapter": 1 },
+        { "target": "adeimantus", "label": "兄弟", "unlockChapter": 1 }
+      ],
+      "detail": {
+        "summary": "格劳孔是推动全书论证的关键人物。他在第二卷用「戒指」与「Gyges」式思想实验要求苏格拉底证明：正义本身（而非名声或奖惩）对行动者有益。理想城邦的许多设计，都是在回应他的质疑。",
+        "life": "柏拉图同母兄，雅典贵族青年，在对话中代表聪明、追问彻底的听众形象。",
+        "appearances": [
+          { "chapter": 1, "title": "第一卷", "note": "与苏格拉底同至比雷埃夫斯" },
+          { "chapter": 2, "title": "第二卷", "note": "提出三阶论证，要求证明正义内在之善" },
+          { "chapter": 5, "title": "第五卷", "note": "对妇女共有等提议的惊愕与追问" }
+        ]
+      }
+    },
+    {
+      "id": "adeimantus",
+      "name": "阿德曼托斯",
+      "role": "主要对话者",
+      "x": 78,
+      "y": 62,
+      "unlockChapter": 1,
+      "stageIntro": "格劳孔之弟。补充从教育与诗人角度对不正义的「社会宣传」批判。",
+      "relations": [
+        { "target": "glaucon", "label": "兄弟", "unlockChapter": 1 },
+        { "target": "socrates", "label": "对话者", "unlockChapter": 1 }
+      ],
+      "detail": {
+        "summary": "阿德曼托斯在第二卷与格劳孔并肩，强调诗与大众教育如何系统性地赞美不正义、贬低正义——若父母与诗人都在说「正义吃亏」，青年如何还能坚持？这使苏格拉底对理想城邦诗乐审查的论述成为必要。",
+        "life": "柏拉图另一位兄长，在对话中常扮演谨慎、关注教育后果的角色。",
+        "appearances": [
+          { "chapter": 1, "title": "第一卷", "note": "参与回城与被留客" },
+          { "chapter": 2, "title": "第二卷", "note": "论诗人与不正义的「广告效应」" },
+          { "chapter": 3, "title": "第三卷", "note": "支持对神话内容的审查" }
+        ]
+      }
+    },
+    {
+      "id": "polemarchus",
+      "name": "玻勒马霍斯",
+      "role": "对话者",
+      "x": 55,
+      "y": 58,
+      "unlockChapter": 1,
+      "stageIntro": "克法洛斯之子。以「利于友、害于敌」界定正义，被苏格拉底驳倒。",
+      "relations": [
+        { "target": "cephalus", "label": "父子", "unlockChapter": 1 },
+        { "target": "socrates", "label": "留客者", "unlockChapter": 1 }
+      ],
+      "detail": {
+        "summary": "玻勒马霍斯在第一卷继承父亲位置，提出流行道德观：正义是「借债还物、帮助朋友、伤害敌人」。苏格拉底通过反例说明：若朋友变坏、敌人变好，则「正义」会要求伤害友人、善待敌人——因此该定义不成立。",
+        "life": "雅典富裕公民之子，后在历史事件中与苏格拉底命运相交（柏拉图其他对话亦有提及）。",
+        "appearances": [
+          { "chapter": 1, "title": "第一卷", "note": "在比雷埃夫斯路口留苏格拉底一行" }
+        ]
+      }
+    },
+    {
+      "id": "cephalus",
+      "name": "克法洛斯",
+      "role": "对话者",
+      "x": 38,
+      "y": 55,
+      "unlockChapter": 1,
+      "stageIntro": "年迈富商。以「欠债还钱」说正义，并谈老年与财富的心理解脱。",
+      "relations": [
+        { "target": "polemarchus", "label": "父子", "unlockChapter": 1 }
+      ],
+      "detail": {
+        "summary": "克法洛斯代表传统、世俗的正义观：诚实、还债、祭祀。他的「老年论」——激情消退后灵魂更安宁——为全书关于灵魂秩序的主题埋下伏笔。他在论证深入前离席祭神，象征旧一代道德答案的退场。",
+        "life": "叙拉古裔富商，晚年在雅典经营家业；其正义观典型而有限。",
+        "appearances": [
+          { "chapter": 1, "title": "第一卷", "note": "家宴开场；论正义与老年" }
+        ]
+      }
+    },
+    {
+      "id": "thrasymachus",
+      "name": "色拉叙马霍斯",
+      "role": "论敌",
+      "x": 28,
+      "y": 48,
+      "unlockChapter": 1,
+      "stageIntro": "修辞家。主张「正义即强者的利益」，第一卷最尖锐的挑战者。",
+      "relations": [
+        { "target": "socrates", "label": "辩论对手", "unlockChapter": 1 }
+      ],
+      "detail": {
+        "summary": "色拉叙马霍斯将正义还原为权力：每一政体中，统治集团把有利于自己的规则称为正义。他的论证迫使苏格拉底必须说明：是否存在超越利益计算的「真正正义」，以及知正义者是否愿意行正义。",
+        "life": "来自卡勒德翁的修辞术传统，在雅典以教授雄辩闻名；代表「现实政治」对哲学的挑衅。",
+        "appearances": [
+          { "chapter": 1, "title": "第一卷", "note": "激烈介入；与苏格拉底长篇交锋" }
+        ]
+      }
+    },
+    {
+      "id": "plato",
+      "name": "柏拉图",
+      "role": "记录者（隐含）",
+      "x": 50,
+      "y": 28,
+      "unlockChapter": 2,
+      "stageIntro": "作者以弟子身份在场。第二卷后叙事常通过格劳孔兄弟展开。",
+      "relations": [
+        { "target": "socrates", "label": "师", "unlockChapter": 2 },
+        { "target": "glaucon", "label": "兄", "unlockChapter": 2 }
+      ],
+      "detail": {
+        "summary": "柏拉图很少在《理想国》中以自己名字发言，但听众结构（格劳孔、阿德曼托斯为其兄）暗示叙述视角来自学园传统。理解「谁在说」有助于区分：哪些是苏格拉底修辞性让步，哪些是柏拉图真正倾向的学说。",
+        "life": "约公元前427–347，雅典学园创立者；从追随苏格拉底到独立构建理念论与政治哲学。",
+        "appearances": [
+          { "chapter": 2, "title": "第二卷", "note": "叙事结构中作为在场者（隐含）" }
+        ]
+      }
+    },
+    {
+      "id": "guardian",
+      "name": "护卫者",
+      "role": "理想城邦阶层（集体）",
+      "x": 32,
+      "y": 30,
+      "unlockChapter": 3,
+      "stageIntro": "城邦的武装与教育阶层。需兼具狼性与驯服，守护而不夺权。",
+      "relations": [
+        { "target": "ideal-city", "label": "属于", "unlockChapter": 3, "targetKind": "location" }
+      ],
+      "detail": {
+        "summary": "护卫者不是单个角色，而是理想城邦中的核心阶级：他们接受严格音乐与体操训练，性格上要像狗——对熟人温和、对陌生人警惕。高级护卫者中选出统治者，即「哲人王」候选。",
+        "life": "虚构政体中的制度角色；对应灵魂中的「激情」部分（thymos）。",
+        "appearances": [
+          { "chapter": 3, "title": "第三卷", "note": "性格塑造与诗乐审查" },
+          { "chapter": 4, "title": "第四卷", "note": "四德在城邦中的分配" }
+        ]
+      }
+    },
+    {
+      "id": "philosopher-king",
+      "name": "哲人王",
+      "role": "理想统治者（概念）",
+      "x": 72,
+      "y": 25,
+      "unlockChapter": 5,
+      "stageIntro": "除非哲人统治，或统治者成为哲人，否则城邦永无安宁。",
+      "relations": [
+        { "target": "socrates", "label": "理念由苏格拉底阐述", "unlockChapter": 5 },
+        { "target": "ideal-city", "label": "统治", "unlockChapter": 5, "targetKind": "location" }
+      ],
+      "detail": {
+        "summary": "哲人王学说是全书政治哲学的高峰：只有把握「善的理念」者才应掌权，否则政体将在欲望与派系间轮回。这与洞穴寓言中「被迫返回统治」的哲人形象相互呼应。",
+        "life": "政治哲学概念，非历史人物；后世影响极大，也引发「乌托邦」争议。",
+        "appearances": [
+          { "chapter": 5, "title": "第五卷", "note": "哲人王命题正式提出" },
+          { "chapter": 6, "title": "第六卷", "note": "与理念论、知识论相连" },
+          { "chapter": 7, "title": "第七卷", "note": "洞穴寓言中的返回义务" }
+        ]
+      }
+    },
+    {
+      "id": "homer",
+      "name": "荷马",
+      "role": "被讨论的诗人",
+      "x": 18,
+      "y": 32,
+      "unlockChapter": 2,
+      "stageIntro": "史诗权威。第二卷起关于诗与教育的大辩论以批判荷马传统为核心。",
+      "relations": [
+        { "target": "socrates", "label": "被审查对象", "unlockChapter": 2 }
+      ],
+      "detail": {
+        "summary": "荷马在对话中并不在场，却作为「希腊人的老师」被反复引用与批判：若荷马描写神说谎、英雄怯懦，青年会模仿什么？第十卷更从「模仿论」论证诗与真理的距离，主张哲人应超越诗人。",
+        "life": "传说为《伊利亚特》《奥德赛》作者；古典教育核心文本。",
+        "appearances": [
+          { "chapter": 2, "title": "第二卷", "note": "诗与正义动机的讨论" },
+          { "chapter": 3, "title": "第三卷", "note": "神话内容审查" },
+          { "chapter": 10, "title": "第十卷", "note": "模仿与理念的三层存在" }
+        ]
+      }
+    }
+  ]
+}

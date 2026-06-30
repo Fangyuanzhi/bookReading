@@ -1,0 +1,61 @@
+{
+  "note": "Public-domain artworks via Met Open Access API.",
+  "cover": {
+    "file": "altered-carbon.jpg",
+    "title": "Nocturne (Nocturne: The Thames at Battersea)",
+    "artist": "James McNeill Whistler",
+    "year": "1878",
+    "source": "https://www.metmuseum.org/art/collection/search/337702"
+  },
+  "chapters": {
+    "1": {
+      "file": "c01.jpg",
+      "title": "”Abiding nowhere, the awakened mind arises”",
+      "artist": "Musō Soseki",
+      "year": "early to mid-14th century",
+      "source": "https://www.metmuseum.org/art/collection/search/816189"
+    },
+    "2": {
+      "file": "c02.jpg",
+      "title": "Arrival of the Europeans",
+      "artist": "",
+      "year": "first quarter 17th century",
+      "source": "https://www.metmuseum.org/art/collection/search/65417"
+    },
+    "3": {
+      "file": "c03.jpg",
+      "title": "The Denial of Saint Peter",
+      "artist": "Caravaggio (Michelangelo Merisi)",
+      "year": "1610",
+      "source": "https://www.metmuseum.org/art/collection/search/437986"
+    },
+    "4": {
+      "file": "c04.jpg",
+      "title": "Boating",
+      "artist": "Edouard Manet",
+      "year": "1874",
+      "source": "https://www.metmuseum.org/art/collection/search/436947"
+    },
+    "5": {
+      "file": "c05.jpg",
+      "title": "The Jabach Family",
+      "artist": "Charles Le Brun",
+      "year": "ca. 1660",
+      "source": "https://www.metmuseum.org/art/collection/search/626692"
+    },
+    "6": {
+      "file": "c06.jpg",
+      "title": "Tobatsu Bishamonten",
+      "artist": "",
+      "year": "late 10th–early 11th century",
+      "source": "https://www.metmuseum.org/art/collection/search/53162"
+    },
+    "7": {
+      "file": "c07.jpg",
+      "title": "The Bay of Bull Arms, Trinity Bay, Newfoundland, Bonfires Lighted on the Hills to Notify of the Arrival of the Cable Fleet on August 5th, 1858",
+      "artist": "Robert Charles Dudley",
+      "year": "1865–66",
+      "source": "https://www.metmuseum.org/art/collection/search/364371"
+    }
+  }
+}

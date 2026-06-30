@@ -60,7 +60,7 @@ func (s *RecommendService) Recommend(ctx context.Context, req *RecommendRequest)
 func (s *RecommendService) getPersonalized(ctx context.Context, userID uuid.UUID, limit int) (*RecommendResult, error) {
 	// 简化实现：随机返回书籍
 	// 实际应该基于用户阅读历史、偏好标签等
-	books, _, err := s.bookRepo.List(ctx, 0, limit*2, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit*2, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (s *RecommendService) getPersonalized(ctx context.Context, userID uuid.UUID
 // getPopularBooks 热门推荐
 func (s *RecommendService) getPopularBooks(ctx context.Context, limit int) (*RecommendResult, error) {
 	// 简化实现：返回最新的书籍
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func (s *RecommendService) getPopularBooks(ctx context.Context, limit int) (*Rec
 // getSimilarBooks 相似书籍推荐
 func (s *RecommendService) getSimilarBooks(ctx context.Context, userID uuid.UUID, limit int) (*RecommendResult, error) {
 	// 简化实现：返回同作者或同类型的书籍
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ func (s *RecommendService) getSimilarBooks(ctx context.Context, userID uuid.UUID
 
 // getNewBooks 新书推荐
 func (s *RecommendService) getNewBooks(ctx context.Context, limit int) (*RecommendResult, error) {
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (s *RecommendService) GetDailyRecommend(ctx context.Context, userID uuid.UU
 	seed := time.Now().YearDay() + int(userID.ID())
 	rand.Seed(int64(seed))
 
-	books, _, err := s.bookRepo.List(ctx, 0, 5, "")
+	books, _, err := s.bookRepo.List(ctx, 0, 5, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +155,7 @@ func (s *RecommendService) GetDailyRecommend(ctx context.Context, userID uuid.UU
 // GetTrendingBooks 趋势书籍
 func (s *RecommendService) GetTrendingBooks(ctx context.Context, limit int) (*RecommendResult, error) {
 	// 简化实现：返回随机书籍
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +174,7 @@ func (s *RecommendService) GetTrendingBooks(ctx context.Context, limit int) (*Re
 
 // GetEditorPicks 编辑精选
 func (s *RecommendService) GetEditorPicks(ctx context.Context, limit int) (*RecommendResult, error) {
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}

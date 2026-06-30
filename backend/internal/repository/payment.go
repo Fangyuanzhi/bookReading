@@ -94,6 +94,11 @@ func (r *PaymentRepository) GetVIPSubscription(ctx context.Context, userID uuid.
 	return &sub, nil
 }
 
+// UpdateVIPSubscription 更新 VIP 订阅
+func (r *PaymentRepository) UpdateVIPSubscription(ctx context.Context, sub *model.VIPSubscription) error {
+	return r.db.WithContext(ctx).Save(sub).Error
+}
+
 // CreateUserBookPurchase 创建用户书籍购买记录
 func (r *PaymentRepository) CreateUserBookPurchase(ctx context.Context, purchase *model.UserBookPurchase) error {
 	return r.db.WithContext(ctx).Create(purchase).Error

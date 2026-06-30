@@ -1,14 +1,24 @@
 import {
+  ArrowLeft,
+  Bookmark,
   ChevronLeft,
   ChevronRight,
   Columns2,
+  Heart,
+  MessageCircle,
   Minus,
+  MoreHorizontal,
   Plus,
   ScrollText,
   Settings2,
+  Share2,
   Users,
   User,
+  Volume2,
   X,
+  CloudRain,
+  Flame,
+  Coffee,
 } from 'lucide-react';
 import {
   FONT_FAMILIES,
@@ -16,6 +26,7 @@ import {
   READING_THEMES,
   useReaderStore,
 } from '../../store/reader';
+import { AMBIENT_SOUNDS } from '../../audio/ambientSounds';
 
 export default function ReaderSettings({ theme, onClose }) {
   const {
@@ -25,7 +36,11 @@ export default function ReaderSettings({ theme, onClose }) {
     fontFamily,
     readingMode,
     isCompanionMode,
+    ambientSound,
+    ambientVolume,
     setTheme,
+    setAmbientSound,
+    setAmbientVolume,
     increaseFontSize,
     decreaseFontSize,
     setLineHeight,
@@ -187,9 +202,58 @@ export default function ReaderSettings({ theme, onClose }) {
             </div>
           </section>
 
+          {/* 环境音 */}
+          <section>
+            <h3 className="text-sm font-medium mb-3 opacity-80 flex items-center gap-2">
+              <Volume2 size={16} />
+              环境音
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {Object.entries(AMBIENT_SOUNDS).map(([key, sound]) => {
+                const active = ambientSound === key;
+                const Icon =
+                  key === 'rain' ? CloudRain : key === 'fireplace' ? Flame : key === 'cafe' ? Coffee : Volume2;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setAmbientSound(key)}
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all"
+                    style={{
+                      borderColor: active ? theme.accent : theme.line,
+                      backgroundColor: active ? theme.glow : theme.bgRaised,
+                    }}
+                  >
+                    <Icon size={22} style={{ color: active ? theme.accent : theme.soft }} />
+                    <span className="font-medium text-sm">{sound.name}</span>
+                    <span className="text-xs opacity-60 text-center">{sound.desc}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {ambientSound !== 'off' && (
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm opacity-80">音量</span>
+                  <span className="text-sm font-medium">{Math.round(ambientVolume * 100)}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="1"
+                  step="0.05"
+                  value={ambientVolume}
+                  onChange={(e) => setAmbientVolume(parseFloat(e.target.value))}
+                  className="reader-range w-full"
+                  style={{ accentColor: theme.accent }}
+                />
+              </div>
+            )}
+          </section>
+
           {/* 结伴模式 */}
           <section>
-            <h3 className="text-sm font-medium mb-3 opacity-80">陪读模式</h3>
+            <h3 className="text-sm font-medium mb-3 opacity-80">阅读模式</h3>
             <button
               type="button"
               onClick={toggleCompanionMode}
@@ -231,45 +295,91 @@ export default function ReaderSettings({ theme, onClose }) {
 
 export function ReaderHeader({
   theme,
-  title,
   showChrome,
-  presenceCount,
-  isCompanionMode,
   onBack,
   onOpenSettings,
+  onShare,
 }) {
   if (!showChrome) return null;
 
   return (
     <header
-      className="shrink-0 px-4 py-3 flex items-center gap-3 border-b backdrop-blur-md reader-chrome"
-      style={{ backgroundColor: `${theme.bg}ee`, borderColor: theme.line, color: theme.text }}
+      className="shrink-0 px-3 sm:px-4 h-12 flex items-center justify-between border-b reader-chrome safe-top"
+      style={{ backgroundColor: theme.bg, borderColor: theme.line, color: theme.text }}
     >
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 shrink-0 px-2 py-1 rounded-lg"
+        className="p-2 -ml-1 rounded-full opacity-80 hover:opacity-100 hover:bg-black/[0.04]"
+        aria-label="返回"
       >
-        <ChevronLeft size={18} />
-        <span className="hidden sm:inline">返回</span>
+        <ArrowLeft size={22} strokeWidth={1.75} />
       </button>
 
-      <h1 className="flex-1 font-serif font-medium truncate text-center text-sm sm:text-base">{title}</h1>
-
-      <div className="flex items-center gap-1 shrink-0">
-        {isCompanionMode && (
-          <span className="hidden sm:inline text-xs opacity-60 mr-1">{presenceCount} 人在读</span>
-        )}
+      <div className="flex items-center gap-0.5">
+        <button
+          type="button"
+          onClick={onShare}
+          className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-black/[0.04]"
+          aria-label="分享"
+        >
+          <Share2 size={20} strokeWidth={1.75} />
+        </button>
         <button
           type="button"
           onClick={onOpenSettings}
-          className="p-2 rounded-lg opacity-80 hover:opacity-100"
-          title="阅读设置"
+          className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-black/[0.04]"
+          aria-label="阅读设置"
         >
-          <Settings2 size={18} />
+          <MoreHorizontal size={22} strokeWidth={1.75} />
         </button>
       </div>
     </header>
+  );
+}
+
+export function ReaderActionBar({
+  theme,
+  showChrome,
+  noteCount = 0,
+  reviewCount = 0,
+  onOpenReviews,
+  onOpenSettings,
+}) {
+  if (!showChrome) return null;
+
+  const items = [
+    { icon: Heart, label: '段评', count: noteCount, onClick: null },
+    { icon: MessageCircle, label: '章评', count: reviewCount, onClick: onOpenReviews },
+    { icon: Settings2, label: '设置', count: null, onClick: onOpenSettings },
+    { icon: Bookmark, label: '书签', count: null, onClick: onOpenSettings },
+  ];
+
+  return (
+    <footer
+      className="shrink-0 border-t reader-chrome safe-bottom reader-action-bar"
+      style={{ backgroundColor: theme.bg, borderColor: theme.line, color: theme.text }}
+    >
+      <div className="max-w-[680px] mx-auto px-6 h-14 flex items-center justify-between">
+        {items.map(({ icon: Icon, label, count, onClick }) => (
+          <button
+            key={label}
+            type="button"
+            onClick={onClick || undefined}
+            disabled={!onClick}
+            className={`flex flex-col items-center gap-0.5 min-w-[56px] ${onClick ? 'opacity-80 hover:opacity-100' : 'opacity-50 cursor-default'}`}
+            aria-label={label}
+          >
+            <Icon size={22} strokeWidth={1.5} />
+            {count != null && count > 0 && (
+              <span className="text-[10px] font-sans tabular-nums" style={{ color: theme.soft }}>
+                {count}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+    </footer>
   );
 }
 
@@ -279,6 +389,8 @@ export function ReaderFooter({
   readingMode,
   currentPage,
   totalPages,
+  chapterIndex = 0,
+  totalChapters = 0,
   canPrevChapter,
   canNextChapter,
   onPrevPage,
@@ -286,44 +398,71 @@ export function ReaderFooter({
   onPrevChapter,
   onNextChapter,
 }) {
-  if (!showChrome || readingMode !== 'page') return null;
+  if (!showChrome) return null;
+
+  if (readingMode === 'scroll') {
+    return (
+      <footer
+        className="shrink-0 px-4 py-2 border-t reader-chrome safe-bottom"
+        style={{ backgroundColor: theme.bg, borderColor: theme.line, color: theme.soft }}
+      >
+        <div className="max-w-[680px] mx-auto flex items-center justify-between gap-4 text-xs font-sans">
+          <button
+            type="button"
+            disabled={!canPrevChapter}
+            onClick={onPrevChapter}
+            className="flex items-center gap-1 opacity-80 hover:opacity-100 disabled:opacity-30 px-2 py-1"
+          >
+            <ChevronLeft size={16} />
+            上一章
+          </button>
+
+          <span className="tabular-nums">
+            第 {chapterIndex + 1} / {totalChapters} 章
+          </span>
+
+          <button
+            type="button"
+            disabled={!canNextChapter}
+            onClick={onNextChapter}
+            className="flex items-center gap-1 opacity-80 hover:opacity-100 disabled:opacity-30 px-2 py-1"
+            style={{ color: canNextChapter ? theme.accent : undefined }}
+          >
+            下一章
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </footer>
+    );
+  }
+
+  if (readingMode !== 'page') return null;
 
   return (
     <footer
-      className="shrink-0 px-4 py-3 border-t backdrop-blur-md reader-chrome"
-      style={{ backgroundColor: `${theme.bg}ee`, borderColor: theme.line, color: theme.text }}
+      className="shrink-0 px-4 py-2 border-t reader-chrome safe-bottom"
+      style={{ backgroundColor: theme.bg, borderColor: theme.line, color: theme.soft }}
     >
-      <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
+      <div className="max-w-[680px] mx-auto flex items-center justify-between gap-4 text-xs font-sans">
         <button
           type="button"
           disabled={!canPrevChapter && currentPage === 0}
           onClick={currentPage === 0 ? onPrevChapter : onPrevPage}
-          className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 disabled:opacity-30 px-2 py-1"
+          className="flex items-center gap-1 opacity-80 hover:opacity-100 disabled:opacity-30 px-2 py-1"
         >
           <ChevronLeft size={16} />
           {currentPage === 0 ? '上一章' : '上一页'}
         </button>
 
-        <div className="flex-1 text-center min-w-0">
-          <p className="text-sm font-medium">
-            {currentPage + 1} / {totalPages}
-          </p>
-          <div className="mt-1.5 h-1 rounded-full overflow-hidden" style={{ backgroundColor: theme.line }}>
-            <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{
-                width: `${totalPages ? ((currentPage + 1) / totalPages) * 100 : 0}%`,
-                backgroundColor: theme.accent,
-              }}
-            />
-          </div>
-        </div>
+        <span className="tabular-nums">
+          {currentPage + 1} / {totalPages}
+        </span>
 
         <button
           type="button"
           disabled={!canNextChapter && currentPage >= totalPages - 1}
           onClick={currentPage >= totalPages - 1 ? onNextChapter : onNextPage}
-          className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 disabled:opacity-30 px-2 py-1"
+          className="flex items-center gap-1 opacity-80 hover:opacity-100 disabled:opacity-30 px-2 py-1"
         >
           {currentPage >= totalPages - 1 ? '下一章' : '下一页'}
           <ChevronRight size={16} />

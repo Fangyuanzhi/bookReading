@@ -1,0 +1,30 @@
+{
+  "bundleId": "com.peidu.reader",
+  "sku": "peidu-reader-001",
+  "version": "1.0.0",
+  "primaryCategory": "BOOKS",
+  "secondaryCategory": "LIFESTYLE",
+  "contentRating": "4+",
+  "copyright": "© 2026 Peidu",
+  "supportUrl": "https://peidu.app/support",
+  "marketingUrl": "https://peidu.app",
+  "privacyPolicyUrl": "https://peidu.app/privacy",
+  "localizations": {
+    "zh-Hans": {
+      "name": "陪读",
+      "subtitle": "氛围陪伴式读书",
+      "keywords": "读书,阅读,小说,段评,社交,共读,氛围,笔记,公版书,原创",
+      "promotionalText": "不是一个人在读——段评浮现在原句旁，结伴开关一键切换陪伴感。",
+      "descriptionFile": "app-store/zh-CN/description.txt",
+      "whatsNewFile": "app-store/zh-CN/release_notes.txt"
+    },
+    "en-US": {
+      "name": "Peidu",
+      "subtitle": "Read together, feel less alone",
+      "keywords": "reading,books,novel,social,notes,community,epub,together,ambient",
+      "promotionalText": "You're not reading alone—margin notes appear beside the lines that moved others.",
+      "descriptionFile": "app-store/en-US/description.txt",
+      "whatsNewFile": "app-store/en-US/release_notes.txt"
+    }
+  }
+}

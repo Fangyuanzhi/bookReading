@@ -1,24 +1,39 @@
-/** 陪读 App 全局氛围主题（与阅读器 THEMES 同系） */
+/** 读书会设计规范（Tailwind 对齐） */
+export const APP_NAME = '读书会';
+export const APP_TAGLINE = '氛围陪伴式读书';
 export const APP_THEME = {
-  bg: '#241C1A',
-  bgPanel: '#2D2320',
-  bgRaised: '#352A26',
-  text: '#E8DDCD',
-  soft: '#B6A795',
-  faint: '#8C7E70',
-  accent: '#E0A24E',
-  accentDark: '#B06A2C',
-  glow: 'rgba(224, 162, 78, 0.16)',
-  line: 'rgba(232, 221, 205, 0.12)',
+  primary: '#2563EB', // blue-600
+  accent: '#2563EB', // 同 primary，兼容旧引用
+  primaryDark: '#1D4ED8', // blue-700
+  bg: '#FAFAF9', // stone-50
+  bgPanel: '#FFFFFF', // white
+  bgRaised: '#F5F5F4', // stone-100
+  text: '#111827', // gray-900
+  soft: '#6B7280', // gray-500
+  faint: '#9CA3AF', // gray-400
+  line: '#E5E7EB', // gray-200
+  glow: 'rgba(37, 99, 235, 0.08)',
+};
+
+/** 字体梯度：UI 无衬线；阅读正文在 Reader 内单独用 serif */
+export const APP_TYPE = {
+  body: 'text-base leading-relaxed', // 16px
+  title: 'text-2xl font-semibold leading-snug tracking-tight', // 24px
+  display: 'text-4xl font-bold leading-tight tracking-tight', // 36px
+  caption: 'text-sm text-gray-500',
+  label: 'text-xs font-medium uppercase tracking-wide text-gray-500',
 };
 
 export const APP_CLASSES = {
-  page: 'min-h-screen text-[#E8DDCD]',
-  card: 'rounded-2xl border backdrop-blur-sm',
+  page: 'min-h-screen text-gray-900 bg-stone-50 font-sans text-base',
+  card: 'rounded-xl border border-gray-200 bg-white',
   input:
-    'w-full px-4 py-3 rounded-xl border bg-[#352A26] border-[rgba(232,221,205,0.12)] text-[#E8DDCD] placeholder-[#8C7E70] focus:outline-none focus:border-[#E0A24E] transition-colors',
+    'w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors',
   btnPrimary:
-    'w-full py-3 rounded-xl font-medium transition-all bg-[#E0A24E] text-[#241C1A] hover:bg-[#B06A2C] disabled:opacity-50',
+    'inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-base transition-colors bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50',
   btnGhost:
-    'px-4 py-2 rounded-xl border border-[rgba(232,221,205,0.12)] text-[#B6A795] hover:text-[#E8DDCD] hover:border-[#E0A24E] transition-colors',
+    'inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-colors text-base',
 };
+
+/** 阅读页文章栏最大宽度 */
+export const ARTICLE_MAX = 'max-w-[680px]';

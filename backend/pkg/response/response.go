@@ -72,6 +72,20 @@ func Forbidden(c *gin.Context, message string) {
 	Error(c, http.StatusForbidden, message)
 }
 
+// PaymentRequired 402 需要付费
+func PaymentRequired(c *gin.Context, message string, data interface{}) {
+	if message == "" {
+		message = "payment required"
+	}
+	logHTTPError(c, http.StatusPaymentRequired, message)
+	c.JSON(http.StatusPaymentRequired, Response{
+		Code:      http.StatusPaymentRequired,
+		Message:   message,
+		Data:      data,
+		RequestID: requestID(c),
+	})
+}
+
 // NotFound 404 错误
 func NotFound(c *gin.Context, message string) {
 	if message == "" {

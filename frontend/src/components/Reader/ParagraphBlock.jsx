@@ -1,4 +1,5 @@
 import { MessageCircle } from 'lucide-react';
+import { highlightCharacterNames } from '../../utils/highlightNames.jsx';
 
 export default function ParagraphBlock({
   para,
@@ -12,29 +13,27 @@ export default function ParagraphBlock({
   isCompanionMode,
   onSelect,
   measureOnly = false,
+  characterNames = [],
 }) {
   const hasNotes = noteCount > 0;
   const interactive = isCompanionMode && !measureOnly;
+  const content = highlightCharacterNames(para, characterNames, `${index}-`, theme);
 
   return (
-    <div data-para-idx={index} className={measureOnly ? '' : 'relative mb-2.5 group'}>
+    <div data-para-idx={index} className={measureOnly ? '' : 'relative mb-[1.35em] group'}>
       <p
         role={interactive ? 'button' : undefined}
         tabIndex={interactive ? 0 : undefined}
-        className={`text-justify indent-[2em] rounded-lg px-3 py-2 transition-all duration-200 ${
-          interactive ? 'cursor-pointer' : 'cursor-default'
-        } ${isSelected ? 'ring-2' : interactive ? 'hover:brightness-[0.98]' : ''}`}
+        className={`reader-body-text text-left ${
+          interactive ? 'cursor-pointer rounded-sm -mx-1 px-1' : 'cursor-default'
+        } ${isSelected ? 'reader-para-selected' : interactive ? 'hover:bg-black/[0.03]' : ''}`}
         style={{
           fontSize: `${fontSize}px`,
           lineHeight,
           fontFamily,
-          boxShadow:
-            interactive && hasNotes && !isSelected
-              ? `inset 4px 0 0 ${theme.accent}`
-              : isSelected
-                ? `0 0 0 2px ${theme.accent}`
-                : undefined,
+          color: theme.text,
           backgroundColor: isSelected ? theme.glow : undefined,
+          boxShadow: interactive && hasNotes && !isSelected ? `inset 3px 0 0 ${theme.accent}` : undefined,
         }}
         onClick={() => interactive && onSelect?.(index)}
         onKeyDown={(e) => {
@@ -44,11 +43,11 @@ export default function ParagraphBlock({
           }
         }}
       >
-        {para}
+        {content}
         {interactive && hasNotes && (
           <span
-            className="inline-flex items-center gap-1 align-middle ml-2 px-2 py-0.5 rounded-full text-xs font-sans"
-            style={{ backgroundColor: theme.glow, color: theme.accent }}
+            className="inline-flex items-center gap-1 align-middle ml-2 px-1.5 py-0.5 rounded text-[11px] font-sans"
+            style={{ backgroundColor: theme.bgRaised, color: theme.soft }}
           >
             <MessageCircle size={11} />
             {noteCount}
@@ -60,7 +59,7 @@ export default function ParagraphBlock({
         <button
           type="button"
           onClick={() => onSelect?.(index)}
-          className="mt-0.5 ml-8 text-xs font-sans opacity-0 group-hover:opacity-50 hover:!opacity-80 transition-opacity"
+          className="mt-1 text-[11px] font-sans opacity-0 group-hover:opacity-50 hover:!opacity-80 transition-opacity"
           style={{ color: theme.soft }}
         >
           写段评

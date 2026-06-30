@@ -56,21 +56,22 @@ export const READING_THEMES = {
     glow: 'rgba(176, 106, 44, 0.12)',
   },
   white: {
-    name: '纯白',
-    desc: '高对比日间',
-    swatch: '#FFFFFF',
-    bg: '#FFFFFF',
-    bgPanel: '#F8F8F8',
-    bgRaised: '#F0F0F0',
-    text: '#1A1A1A',
-    soft: '#666666',
-    line: 'rgba(0, 0, 0, 0.08)',
+    name: '纸白',
+    desc: '暖灰底 · 衬线正文',
+    swatch: '#FAFAF9',
+    bg: '#FAFAF9',
+    bgPanel: '#FFFFFF',
+    bgRaised: '#F5F5F4',
+    text: '#111827',
+    soft: '#6B7280',
+    faint: '#9CA3AF',
+    line: '#E5E7EB',
     accent: '#2563EB',
-    glow: 'rgba(37, 99, 235, 0.1)',
+    glow: 'rgba(37, 99, 235, 0.08)',
   },
   dusk: {
     name: '暮',
-    desc: '陪读默认氛围',
+    desc: '读书会默认氛围',
     swatch: '#241C1A',
     bg: '#241C1A',
     bgPanel: '#2D2320',
@@ -98,7 +99,10 @@ export const READING_THEMES = {
 
 export const FONT_FAMILIES = {
   serif: { name: '宋体', value: "'Noto Serif SC', 'Songti SC', Georgia, serif" },
-  sans: { name: '黑体', value: "'Noto Sans SC', system-ui, sans-serif" },
+  sans: {
+    name: '系统',
+    value: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei UI', sans-serif",
+  },
   kai: { name: '楷体', value: "'KaiTi', 'STKaiti', 'Noto Serif SC', serif" },
 };
 
@@ -113,16 +117,21 @@ export const THEMES = READING_THEMES;
 export const useReaderStore = create(
   persist(
     (set) => ({
-      theme: 'eyeGreen',
+      theme: 'white',
       fontSize: 19,
-      lineHeight: 2.0,
+      lineHeight: 1.75,
       fontFamily: 'serif',
-      readingMode: 'page',
+      readingMode: 'scroll',
       isCompanionMode: true,
+      ambientSound: 'off',
+      ambientVolume: 0.45,
       showChrome: true,
       showSettings: false,
 
       setTheme: (theme) => set({ theme }),
+      setAmbientSound: (ambientSound) => set({ ambientSound }),
+      setAmbientVolume: (ambientVolume) =>
+        set({ ambientVolume: Math.max(0.1, Math.min(1, ambientVolume)) }),
       setFontSize: (size) => set({ fontSize: Math.max(14, Math.min(28, size)) }),
       increaseFontSize: () => set((s) => ({ fontSize: Math.min(28, s.fontSize + 1) })),
       decreaseFontSize: () => set((s) => ({ fontSize: Math.max(14, s.fontSize - 1) })),
@@ -145,13 +154,15 @@ export const useReaderStore = create(
         fontFamily: s.fontFamily,
         readingMode: s.readingMode,
         isCompanionMode: s.isCompanionMode,
+        ambientSound: s.ambientSound,
+        ambientVolume: s.ambientVolume,
       }),
     },
   ),
 );
 
 export function getTheme(key) {
-  return READING_THEMES[key] || READING_THEMES.eyeGreen;
+  return READING_THEMES[key] || READING_THEMES.white;
 }
 
 export function getFontFamily(key) {

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="陪读">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="55%" r="45%">
+      <stop offset="0%" stop-color="#F5E6D3" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#F5E6D3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Rounded square background (iOS squircle approx) -->
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="224" fill="url(#glow)"/>
+  <!-- Open book -->
+  <path fill="#F5E6D3" d="M312 340c0-24 20-44 52-44h116v472H364c-32 0-52-20-52-44V340zm284 0v384c0 24 20 44 52 44h116V296H648c-32 0-52 20-52 44z"/>
+  <path fill="#E8D5BC" d="M512 296v472c-8-6-20-10-32-10H364c-20 0-36-8-52-20V340c16-12 32-20 52-20h116c12 0 24-4 32-10z"/>
+  <!-- Companion dots -->
+  <circle cx="248" cy="520" r="36" fill="#FBBF24" opacity="0.9"/>
+  <circle cx="776" cy="520" r="36" fill="#FBBF24" opacity="0.9"/>
+  <!-- Stars -->
+  <circle cx="200" cy="200" r="6" fill="#fff" opacity="0.5"/>
+  <circle cx="780" cy="180" r="4" fill="#fff" opacity="0.4"/>
+  <circle cx="640" cy="240" r="5" fill="#fff" opacity="0.35"/>
+</svg>

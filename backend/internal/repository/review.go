@@ -132,6 +132,76 @@ func (r *ReviewRepository) DecrementLikes(ctx context.Context, reviewID uuid.UUI
 	return r.db.WithContext(ctx).Model(&model.Review{}).Where("id = ?", reviewID).UpdateColumn("likes", gorm.Expr("likes - 1")).Error
 }
 
+// SumLikesByUser 统计用户书评收到的总点亮数
+func (r *ReviewRepository) SumLikesByUser(ctx context.Context, userID uuid.UUID) (int64, error) {
+	var total int64
+	err := r.db.WithContext(ctx).Model(&model.Review{}).
+		Where("user_id = ?", userID).
+		Select("COALESCE(SUM(likes), 0)").
+		Scan(&total).Error
+	return total, err
+}
+
+// CountByUser 统计用户书评数（仅已发布书籍）
+func (r *ReviewRepository) CountByUser(ctx context.Context, userID uuid.UUID) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&model.Review{}).
+		Joins("JOIN books ON books.id = reviews.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("reviews.user_id = ?", userID).
+		Count(&count).Error
+	return count, err
+}
+
+// ListPublicByUser 获取用户书评（仅已发布书籍）
+func (r *ReviewRepository) ListPublicByUser(ctx context.Context, userID uuid.UUID, offset, limit int) ([]model.Review, error) {
+	var reviews []model.Review
+	err := r.db.WithContext(ctx).
+		Preload("Book").
+		Joins("JOIN books ON books.id = reviews.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("reviews.user_id = ?", userID).
+		Order("reviews.created_at DESC").
+		Offset(offset).
+		Limit(limit).
+		Find(&reviews).Error
+	return reviews, err
+}
+
+// ListRecentByUserIDs 获取关注用户的最新书评
+func (r *ReviewRepository) ListRecentByUserIDs(ctx context.Context, userIDs []uuid.UUID, limit int) ([]model.Review, error) {
+	if len(userIDs) == 0 {
+		return []model.Review{}, nil
+	}
+	if limit < 1 || limit > 100 {
+		limit = 30
+	}
+	var reviews []model.Review
+	err := r.db.WithContext(ctx).
+		Preload("User").
+		Preload("Book").
+		Joins("JOIN books ON books.id = reviews.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("reviews.user_id IN ?", userIDs).
+		Order("reviews.created_at DESC").
+		Limit(limit).
+		Find(&reviews).Error
+	return reviews, err
+}
+
+// ListHot 热门书评（按点亮数）
+func (r *ReviewRepository) ListHot(ctx context.Context, limit int) ([]model.Review, error) {
+	if limit < 1 || limit > 50 {
+		limit = 10
+	}
+	var reviews []model.Review
+	err := r.db.WithContext(ctx).
+		Preload("User").
+		Preload("Book").
+		Joins("JOIN books ON books.id = reviews.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Order("reviews.likes DESC, reviews.created_at DESC").
+		Limit(limit).
+		Find(&reviews).Error
+	return reviews, err
+}
+
 // Search 搜索书评
 func (r *ReviewRepository) Search(ctx context.Context, query string, page, pageSize int) ([]model.Review, int64, error) {
 	var reviews []model.Review

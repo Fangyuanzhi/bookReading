@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth';
-import { APP_THEME, APP_CLASSES } from '../styles/theme';
+import { APP_CLASSES, APP_NAME, APP_TAGLINE, APP_THEME, APP_TYPE } from '../styles/theme';
 import { BookOpen } from 'lucide-react';
 
 export default function Login() {
@@ -41,27 +41,24 @@ export default function Login() {
           className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
           style={{ backgroundColor: APP_THEME.glow }}
         >
-          <BookOpen size={28} style={{ color: APP_THEME.accent }} />
+          <BookOpen size={28} className="text-blue-600" />
         </div>
-        <h1 className="text-3xl font-serif font-semibold mb-2">陪读</h1>
-        <p className="text-sm opacity-70">氛围陪伴式读书，不是一个人在读</p>
+        <h1 className={`${APP_TYPE.display} mb-2`}>{APP_NAME}</h1>
+        <p className={APP_TYPE.caption}>{APP_TAGLINE}，不是一个人在读</p>
       </div>
 
-      <div className={`${APP_CLASSES.card} p-8`} style={{ backgroundColor: APP_THEME.bgPanel, borderColor: APP_THEME.line }}>
-        <h2 className="text-xl font-serif text-center mb-6">{isLogin ? '欢迎回来' : '加入陪读'}</h2>
+      <div className={`${APP_CLASSES.card} p-6`}>
+        <h2 className={`${APP_TYPE.title} text-center mb-6`}>{isLogin ? '欢迎回来' : `加入${APP_NAME}`}</h2>
 
         {error && (
-          <div
-            className="mb-4 p-3 rounded-xl text-sm border"
-            style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)', borderColor: 'rgba(220, 38, 38, 0.3)', color: '#fca5a5' }}
-          >
+          <div className="mb-4 p-4 rounded-xl text-sm border border-red-200 bg-red-50 text-red-600">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm mb-1.5 opacity-80">邮箱</label>
+            <label className={`block ${APP_TYPE.caption} mb-2`}>邮箱</label>
             <input
               type="email"
               value={email}
@@ -73,7 +70,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm mb-1.5 opacity-80">密码</label>
+            <label className={`block ${APP_TYPE.caption} mb-2`}>密码</label>
             <input
               type="password"
               value={password}
@@ -87,7 +84,7 @@ export default function Login() {
 
           {!isLogin && (
             <div>
-              <label className="block text-sm mb-1.5 opacity-80">昵称（可选）</label>
+              <label className={`block ${APP_TYPE.caption} mb-2`}>昵称（可选）</label>
               <input
                 type="text"
                 value={displayName}
@@ -98,12 +95,12 @@ export default function Login() {
             </div>
           )}
 
-          <button type="submit" disabled={isLoading} className={APP_CLASSES.btnPrimary}>
+          <button type="submit" disabled={isLoading} className={`${APP_CLASSES.btnPrimary} !w-full`}>
             {isLoading ? '请稍候...' : isLogin ? '登录' : '注册并开始阅读'}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm opacity-70">
+        <div className={`mt-6 text-center ${APP_TYPE.caption}`}>
           {isLogin ? '还没有账号？' : '已有账号？'}
           <button
             type="button"
@@ -111,8 +108,7 @@ export default function Login() {
               setIsLogin(!isLogin);
               setError('');
             }}
-            className="ml-1 underline underline-offset-2 hover:opacity-100"
-            style={{ color: APP_THEME.accent }}
+            className="ml-1 text-blue-600 hover:text-blue-700 underline underline-offset-2"
           >
             {isLogin ? '立即注册' : '去登录'}
           </button>

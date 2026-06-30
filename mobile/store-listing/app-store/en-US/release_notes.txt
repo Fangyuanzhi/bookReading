@@ -1,0 +1,8 @@
+Peidu 1.0 — first release 🎉
+
+• Ambient reader with themes and soundscapes
+• Margin notes and live chapter presence
+• Library, bookshelf, resume reading
+• Author tools and personal profiles
+• Reading groups and discover feed
+• Reporting and compliance pages

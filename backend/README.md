@@ -8,7 +8,7 @@ Go + Gin + GORM 实现的「陪读」氛围陪伴式读书社区后端服务。
 - **Gin** - Web 框架
 - **GORM** - ORM
 - **PostgreSQL** - 主数据库
-- **Redis** - 缓存
+- **Redis** - 缓存 / 在场
 - **Centrifugo** - 实时消息 (WebSocket)
 - **MinIO** - 对象存储
 
@@ -41,8 +41,8 @@ go build -o bin/api ./cmd/api
 # 健康检查
 curl http://localhost:8080/health
 
-# Ping
-curl http://localhost:8080/ping
+# 单元测试
+go test ./...
 ```
 
 ## 项目结构
@@ -73,16 +73,27 @@ backend/
 | Phase | 内容 | 状态 |
 |-------|------|------|
 | P1 | 基础设施 | ✅ 完成 |
-| P2 | 认证体系 | ⏳ 待开发 |
-| P3 | 内容管理 | ⏳ 待开发 |
-| P4 | 段评系统 | ⏳ 待开发 |
-| P5 | 书评互动 | ⏳ 待开发 |
-| P6 | 实时在场 | ⏳ 待开发 |
-| P7 | 安全优化 | ⏳ 待开发 |
+| P2 | 认证体系 | ✅ 完成 |
+| P3 | 内容管理 + EPUB/TXT 导入 | ✅ 完成 |
+| P4 | 段评系统 | ✅ 完成 |
+| P5 | 书评互动 | ✅ 完成 |
+| P6 | 实时在场 | ✅ 完成 |
+| P7 | 阅读进度 + 举报合规 | ✅ 完成 |
+| P8 | 安全加固 / 生产化 | ⏳ 部分完成（密码策略、限流、超时、RequestID、JWT 环境变量） |
 
-## API 文档
+## 主要 API
 
-详见 `docs/API.md` (开发中)
+| 模块 | 端点 |
+|------|------|
+| 认证 | `POST /api/v1/auth/register`, `login`, `GET /me` |
+| 书籍 | `GET/POST /api/v1/books`, `GET /books/:id/chapters` |
+| 阅读进度 | `GET /reading/progress`, `PUT /books/:id/progress` |
+| 段评 | `GET/POST /api/v1/notes` |
+| 书评 | `GET/POST /api/v1/reviews` |
+| 在场 | `GET /chapters/:id/presence`, `POST /presence/heartbeat` |
+| 上传 | `POST /api/v1/upload/book` (EPUB/TXT) |
+| 举报 | `POST /api/v1/reports` |
+| 搜索 | `GET /api/v1/search` |
 
 ## License
 

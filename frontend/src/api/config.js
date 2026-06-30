@@ -13,17 +13,23 @@ const ENDPOINTS = {
     REGISTER: `${API_BASE_URL}/auth/register`,
     LOGIN: `${API_BASE_URL}/auth/login`,
     ME: `${API_BASE_URL}/auth/me`,
+    STATS: `${API_BASE_URL}/auth/me/stats`,
   },
   // 书籍
   BOOKS: {
     LIST: `${API_BASE_URL}/books`,
+    MINE: `${API_BASE_URL}/books/mine`,
     DETAIL: (id) => `${API_BASE_URL}/books/${id}`,
+    STATUS: (id) => `${API_BASE_URL}/books/${id}/status`,
     CHAPTERS: (id) => `${API_BASE_URL}/books/${id}/chapters`,
+    CHAPTER: (id) => `${API_BASE_URL}/books/${id}/chapter`,
     REVIEWS: (id) => `${API_BASE_URL}/books/${id}/reviews`,
   },
   // 章节
   CHAPTERS: {
     DETAIL: (id) => `${API_BASE_URL}/chapters/${id}`,
+    UPDATE: (id) => `${API_BASE_URL}/chapters/${id}`,
+    DELETE: (id) => `${API_BASE_URL}/chapters/${id}`,
     NOTES: (id) => `${API_BASE_URL}/chapters/${id}/notes`,
     REVIEWS: (id) => `${API_BASE_URL}/chapters/${id}/reviews`,
     PRESENCE: (id) => `${API_BASE_URL}/chapters/${id}/presence`,
@@ -52,11 +58,60 @@ const ENDPOINTS = {
   PRESENCE: {
     HEARTBEAT: `${API_BASE_URL}/presence/heartbeat`,
   },
+  // 阅读进度
+  READING: {
+    RECENT: `${API_BASE_URL}/reading/progress`,
+    BOOK: (id) => `${API_BASE_URL}/books/${id}/progress`,
+  },
+  // 书架
+  SHELF: {
+    LIST: `${API_BASE_URL}/shelf`,
+    STATUS: (bookId) => `${API_BASE_URL}/shelf/${bookId}/status`,
+    REMOVE: (bookId) => `${API_BASE_URL}/shelf/${bookId}`,
+  },
   // 搜索
   SEARCH: `${API_BASE_URL}/search`,
+  // 发现
+  DISCOVER: `${API_BASE_URL}/discover`,
+  // 轻社交
+  FEED: `${API_BASE_URL}/feed`,
+  USERS: {
+    PROFILE: (id) => `${API_BASE_URL}/users/${id}`,
+    FOLLOW: (id) => `${API_BASE_URL}/users/${id}/follow`,
+    FOLLOW_STATUS: (id) => `${API_BASE_URL}/users/${id}/follow/status`,
+    FOLLOWERS: (id) => `${API_BASE_URL}/users/${id}/followers`,
+    FOLLOWING: (id) => `${API_BASE_URL}/users/${id}/following`,
+  },
   // 上传
   UPLOAD: {
     BOOK: `${API_BASE_URL}/upload/book`,
+  },
+  // 举报
+  REPORTS: {
+    CREATE: `${API_BASE_URL}/reports`,
+  },
+  // 支付 / VIP
+  PAYMENTS: {
+    PRICING: `${API_BASE_URL}/pricing`,
+    LIST: `${API_BASE_URL}/payments`,
+    CREATE: `${API_BASE_URL}/payments`,
+    DETAIL: (id) => `${API_BASE_URL}/payments/${id}`,
+    CONFIRM: (id) => `${API_BASE_URL}/payments/${id}/confirm`,
+  },
+  VIP: {
+    STATUS: `${API_BASE_URL}/vip/status`,
+  },
+  ACCESS: {
+    BOOK: `${API_BASE_URL}/books/access`,
+  },
+  // 共读小组
+  GROUPS: {
+    LIST: `${API_BASE_URL}/groups`,
+    MINE: `${API_BASE_URL}/groups/mine`,
+    DETAIL: (id) => `${API_BASE_URL}/groups/${id}`,
+    JOIN: (id) => `${API_BASE_URL}/groups/${id}/join`,
+    LEAVE: (id) => `${API_BASE_URL}/groups/${id}/leave`,
+    POSTS: (id) => `${API_BASE_URL}/groups/${id}/posts`,
   },
 };
 
@@ -129,7 +184,11 @@ class ApiClient {
           message: msg,
           request_id: rid,
         });
-        throw new Error(rid ? `${msg} (request_id: ${rid})` : msg);
+        const err = new Error(rid ? `${msg} (request_id: ${rid})` : msg);
+        err.status = response.status;
+        err.code = data.code || response.status;
+        err.data = data.data;
+        throw err;
       }
 
       logApiDebug('API 请求成功', {
@@ -227,6 +286,7 @@ const api = {
     register: (data) => api.client.post(ENDPOINTS.AUTH.REGISTER, data),
     login: (data) => api.client.post(ENDPOINTS.AUTH.LOGIN, data),
     me: () => api.client.get(ENDPOINTS.AUTH.ME),
+    stats: () => api.client.get(ENDPOINTS.AUTH.STATS),
   },
 
   books: {
@@ -234,11 +294,21 @@ const api = {
       const query = new URLSearchParams(params).toString();
       return api.client.get(`${ENDPOINTS.BOOKS.LIST}?${query}`);
     },
+    mine: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.BOOKS.MINE}?${query}`);
+    },
     detail: (id) => api.client.get(ENDPOINTS.BOOKS.DETAIL(id)),
     create: (data) => api.client.post(ENDPOINTS.BOOKS.LIST, data),
     update: (id, data) => api.client.put(ENDPOINTS.BOOKS.DETAIL(id), data),
+    updateStatus: (id, status) => api.client.request(ENDPOINTS.BOOKS.STATUS(id), {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
     delete: (id) => api.client.delete(ENDPOINTS.BOOKS.DETAIL(id)),
     chapters: (id) => api.client.get(ENDPOINTS.BOOKS.CHAPTERS(id)),
+    createChapter: (bookId, data) => api.client.post(ENDPOINTS.BOOKS.CHAPTER(bookId), data),
+    createChapters: (bookId, data) => api.client.post(ENDPOINTS.BOOKS.CHAPTERS(bookId), data),
     reviews: (id, params = {}) => {
       const query = new URLSearchParams(params).toString();
       return api.client.get(`${ENDPOINTS.BOOKS.REVIEWS(id)}?${query}`);
@@ -247,6 +317,8 @@ const api = {
 
   chapters: {
     detail: (id) => api.client.get(ENDPOINTS.CHAPTERS.DETAIL(id)),
+    update: (id, data) => api.client.put(ENDPOINTS.CHAPTERS.UPDATE(id), data),
+    delete: (id) => api.client.delete(ENDPOINTS.CHAPTERS.DELETE(id)),
     notes: (id) => api.client.get(ENDPOINTS.CHAPTERS.NOTES(id)),
     reviews: (id, params = {}) => {
       const query = new URLSearchParams(params).toString();
@@ -287,13 +359,99 @@ const api = {
     heartbeat: (chapterId) => api.client.post(ENDPOINTS.PRESENCE.HEARTBEAT, { chapter_id: chapterId }),
   },
 
+  reading: {
+    recent: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.READING.RECENT}?${query}`);
+    },
+    getBookProgress: (bookId) => api.client.get(ENDPOINTS.READING.BOOK(bookId)),
+    saveProgress: (bookId, data) => api.client.put(ENDPOINTS.READING.BOOK(bookId), data),
+  },
+
+  shelf: {
+    list: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.SHELF.LIST}?${query}`);
+    },
+    add: (bookId) => api.client.post(ENDPOINTS.SHELF.LIST, { book_id: bookId }),
+    remove: (bookId) => api.client.delete(ENDPOINTS.SHELF.REMOVE(bookId)),
+    status: (bookId) => api.client.get(ENDPOINTS.SHELF.STATUS(bookId)),
+  },
+
   search: (params = {}) => {
     const query = new URLSearchParams(params).toString();
     return api.client.get(`${ENDPOINTS.SEARCH}?${query}`);
   },
 
+  discover: {
+    feed: () => api.client.get(ENDPOINTS.DISCOVER),
+  },
+
   upload: {
     book: (file, fields = {}) => api.client.upload(ENDPOINTS.UPLOAD.BOOK, file, fields),
+  },
+
+  reports: {
+    create: (data) => api.client.post(ENDPOINTS.REPORTS.CREATE, data),
+  },
+
+  groups: {
+    list: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.GROUPS.LIST}?${query}`);
+    },
+    mine: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.GROUPS.MINE}?${query}`);
+    },
+    detail: (id) => api.client.get(ENDPOINTS.GROUPS.DETAIL(id)),
+    create: (data) => api.client.post(ENDPOINTS.GROUPS.LIST, data),
+    join: (id) => api.client.post(ENDPOINTS.GROUPS.JOIN(id), {}),
+    leave: (id) => api.client.post(ENDPOINTS.GROUPS.LEAVE(id), {}),
+    delete: (id) => api.client.delete(ENDPOINTS.GROUPS.DETAIL(id)),
+    posts: (id, params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.GROUPS.POSTS(id)}?${query}`);
+    },
+    createPost: (id, data) => api.client.post(ENDPOINTS.GROUPS.POSTS(id), data),
+  },
+
+  payments: {
+    pricing: () => api.client.get(ENDPOINTS.PAYMENTS.PRICING),
+    list: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.PAYMENTS.LIST}?${query}`);
+    },
+    create: (data) => api.client.post(ENDPOINTS.PAYMENTS.CREATE, data),
+    detail: (id) => api.client.get(ENDPOINTS.PAYMENTS.DETAIL(id)),
+    confirm: (id) => api.client.post(ENDPOINTS.PAYMENTS.CONFIRM(id), {}),
+  },
+
+  vip: {
+    status: () => api.client.get(ENDPOINTS.VIP.STATUS),
+  },
+
+  access: {
+    book: (bookId) => api.client.get(`${ENDPOINTS.ACCESS.BOOK}?book_id=${bookId}`),
+  },
+
+  social: {
+    feed: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.FEED}?${query}`);
+    },
+    profile: (id) => api.client.get(ENDPOINTS.USERS.PROFILE(id)),
+    follow: (id) => api.client.post(ENDPOINTS.USERS.FOLLOW(id), {}),
+    unfollow: (id) => api.client.delete(ENDPOINTS.USERS.FOLLOW(id)),
+    followStatus: (id) => api.client.get(ENDPOINTS.USERS.FOLLOW_STATUS(id)),
+    followers: (id, params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.USERS.FOLLOWERS(id)}?${query}`);
+    },
+    following: (id, params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return api.client.get(`${ENDPOINTS.USERS.FOLLOWING(id)}?${query}`);
+    },
   },
 };
 

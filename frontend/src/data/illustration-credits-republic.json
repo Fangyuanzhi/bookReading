@@ -1,0 +1,82 @@
+{
+  "note": "Public-domain artworks via Met Open Access API and NGA Open Access.",
+  "cover": {
+    "file": "republic.jpg",
+    "title": "The Parthenon",
+    "artist": "Frederic Edwin Church",
+    "year": "1871",
+    "source": "https://www.metmuseum.org/art/collection/search/10482"
+  },
+  "chapters": {
+    "1": {
+      "file": "b1_piraeus.jpg",
+      "title": "The Death of Socrates",
+      "artist": "Jacques Louis David",
+      "year": "1787",
+      "source": "https://www.metmuseum.org/art/collection/search/436105"
+    },
+    "2": {
+      "file": "b2_citybirth.jpg",
+      "title": "Temple of Bacchus, Athens (53. Athènes. 1842. Temple de Bacchus)",
+      "artist": "Joseph-Philibert Girault de Prangey",
+      "year": "1842",
+      "source": "https://www.metmuseum.org/art/collection/search/702994"
+    },
+    "3": {
+      "file": "b3_muses.jpg",
+      "title": "The Musicians",
+      "artist": "Caravaggio (Michelangelo Merisi)",
+      "year": "1597",
+      "source": "https://www.metmuseum.org/art/collection/search/435844"
+    },
+    "4": {
+      "file": "b4_virtues.jpg",
+      "title": "The Triumph of the Cardinal Virtues: Temperance, Prudence, Fortitude and Justice (one of a series)",
+      "artist": "",
+      "year": "last quarter 16th century",
+      "source": "https://www.metmuseum.org/art/collection/search/195384"
+    },
+    "5": {
+      "file": "b5_guardians.jpg",
+      "title": "Bronze warrior",
+      "artist": "",
+      "year": "ca. 750–700 BCE",
+      "source": "https://www.metmuseum.org/art/collection/search/253512"
+    },
+    "6": {
+      "file": "b6_dividedline.jpg",
+      "title": "Apollo and Aurora",
+      "artist": "Gerard de Lairesse",
+      "year": "1671",
+      "source": "https://www.metmuseum.org/art/collection/search/436843"
+    },
+    "7": {
+      "file": "b7_cave.jpg",
+      "title": "Plato's Cave (Antrum Platonicum)",
+      "artist": "Jan Pietersz Saenredam after Cornelis van Haarlem",
+      "year": "1604",
+      "source": "https://www.nga.gov/collection/art-object-page.62542.html"
+    },
+    "8": {
+      "file": "b8_regimes.jpg",
+      "title": "Marble statue of a wounded warrior",
+      "artist": "",
+      "year": "ca. 138–181 CE",
+      "source": "https://www.metmuseum.org/art/collection/search/251929"
+    },
+    "9": {
+      "file": "b9_tyrant.jpg",
+      "title": "Horses Harnessed to a Chariot",
+      "artist": "",
+      "year": "ca. 1353–1336 B.C.",
+      "source": "https://www.metmuseum.org/art/collection/search/544062"
+    },
+    "10": {
+      "file": "b10_mythofer.jpg",
+      "title": "Christ's Descent into Hell",
+      "artist": "Hieronymus Bosch",
+      "year": "",
+      "source": "https://www.metmuseum.org/art/collection/search/435725"
+    }
+  }
+}

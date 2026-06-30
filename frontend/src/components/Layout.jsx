@@ -1,18 +1,24 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth';
-import { BookOpen, Search, User, LogOut, Upload as UploadIcon } from 'lucide-react';
-import { APP_THEME, APP_CLASSES } from '../styles/theme';
+import { Search, User, LogOut, Upload as UploadIcon, PenLine, Users, Compass, Crown, BookMarked, Rss } from 'lucide-react';
+import { APP_CLASSES, APP_NAME, APP_TYPE } from '../styles/theme';
 
-function NavLink({ to, icon: Icon, label, mobileIconOnly }) {
+function IconButton({ to, onClick, icon: Icon, label }) {
+  const className =
+    'p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-stone-100 transition-colors';
+
+  if (to) {
+    return (
+      <Link to={to} className={className} title={label} aria-label={label}>
+        <Icon size={20} strokeWidth={1.75} />
+      </Link>
+    );
+  }
+
   return (
-    <Link
-      to={to}
-      className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl opacity-80 hover:opacity-100 hover:bg-white/5 transition-all"
-      style={{ color: APP_THEME.soft }}
-    >
-      <Icon size={17} />
-      <span className={mobileIconOnly ? 'hidden sm:inline max-w-[80px] truncate' : 'hidden sm:inline'}>{label}</span>
-    </Link>
+    <button type="button" onClick={onClick} className={className} title={label} aria-label={label}>
+      <Icon size={20} strokeWidth={1.75} />
+    </button>
   );
 }
 
@@ -26,58 +32,29 @@ export default function Layout() {
   };
 
   return (
-    <div className={`${APP_CLASSES.page} font-sans min-h-[100dvh]`} style={{ backgroundColor: APP_THEME.bg, color: APP_THEME.text }}>
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden>
-        <div
-          className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20"
-          style={{ backgroundColor: APP_THEME.accent }}
-        />
-        <div
-          className="absolute top-1/2 -left-48 w-80 h-80 rounded-full blur-3xl opacity-10"
-          style={{ backgroundColor: APP_THEME.accentDark }}
-        />
-      </div>
-
-      <header
-        className="sticky top-0 z-20 backdrop-blur-xl border-b"
-        style={{ backgroundColor: `${APP_THEME.bg}cc`, borderColor: APP_THEME.line }}
-      >
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105"
-              style={{ backgroundColor: APP_THEME.glow }}
-            >
-              <BookOpen size={18} style={{ color: APP_THEME.accent }} />
-            </div>
-            <div>
-              <span className="text-lg font-serif font-semibold tracking-wide block leading-tight">陪读</span>
-              <span className="text-[10px] opacity-50 hidden sm:block">氛围陪伴式读书</span>
-            </div>
+    <div className={APP_CLASSES.page}>
+      <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div className="max-w-[680px] lg:max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link to="/" className={`${APP_TYPE.title} text-xl text-gray-900`}>
+            {APP_NAME}
           </Link>
 
-          <nav className="flex items-center gap-1 sm:gap-2 text-sm">
-            <NavLink to="/search" icon={Search} label="搜索" />
+          <nav className="flex items-center gap-1">
+            <IconButton to="/discover" icon={Compass} label="发现" />
+            <IconButton to="/search" icon={Search} label="搜索" />
             {user ? (
               <>
-                <NavLink to="/upload" icon={UploadIcon} label="导入" />
-                <NavLink to="/profile" icon={User} label={user.display_name || '我的'} mobileIconOnly />
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="p-2.5 rounded-xl opacity-70 hover:opacity-100 hover:bg-white/5 transition-all"
-                  style={{ color: APP_THEME.soft }}
-                  title="退出"
-                >
-                  <LogOut size={17} />
-                </button>
+                <IconButton to="/feed" icon={Rss} label="动态" />
+                <IconButton to="/shelf" icon={BookMarked} label="书架" />
+                <IconButton to="/author" icon={PenLine} label="创作" />
+                <IconButton to="/groups" icon={Users} label="共读" />
+                <IconButton to="/vip" icon={Crown} label="VIP" />
+                <IconButton to="/upload" icon={UploadIcon} label="导入" />
+                <IconButton to="/profile" icon={User} label="我的" />
+                <IconButton onClick={handleLogout} icon={LogOut} label="退出" />
               </>
             ) : (
-              <Link
-                to="/login"
-                className="ml-1 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:brightness-110"
-                style={{ backgroundColor: APP_THEME.accent, color: APP_THEME.bg }}
-              >
+              <Link to="/login" className={`${APP_CLASSES.btnPrimary} ml-2 !w-auto !py-2 text-sm`}>
                 登录
               </Link>
             )}
@@ -85,9 +62,15 @@ export default function Layout() {
         </div>
       </header>
 
-      <main className="relative max-w-6xl mx-auto px-4 py-8 pb-16">
+      <main className="max-w-[680px] lg:max-w-4xl mx-auto px-4 py-6 pb-16">
         <Outlet />
       </main>
+
+      <footer className="border-t border-gray-200 py-6 text-center">
+        <Link to="/legal" className={`${APP_TYPE.caption} text-gray-400 hover:text-gray-600`}>
+          内容合规与避风港说明
+        </Link>
+      </footer>
     </div>
   );
 }

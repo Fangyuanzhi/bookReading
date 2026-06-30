@@ -31,3 +31,9 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+
+# local runtime
+.run/
+
+# python tooling
+scripts/.venv/

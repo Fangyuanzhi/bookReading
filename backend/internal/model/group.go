@@ -48,3 +48,29 @@ type GroupMember struct {
 func (GroupMember) TableName() string {
 	return "group_members"
 }
+
+// GroupPost 小组讨论帖
+type GroupPost struct {
+	ID        uuid.UUID      `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	GroupID   uuid.UUID      `json:"group_id" gorm:"type:uuid;not null;index"`
+	Group     *ReadingGroup  `json:"group,omitempty" gorm:"foreignKey:GroupID"`
+	UserID    uuid.UUID      `json:"user_id" gorm:"type:uuid;not null;index"`
+	User      *User          `json:"user,omitempty" gorm:"foreignKey:UserID"`
+	Content   string         `json:"content" gorm:"type:text;not null"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
+}
+
+// TableName 指定表名
+func (GroupPost) TableName() string {
+	return "group_posts"
+}
+
+// BeforeCreate 创建前钩子
+func (p *GroupPost) BeforeCreate(tx *gorm.DB) error {
+	if p.ID == uuid.Nil {
+		p.ID = uuid.New()
+	}
+	return nil
+}

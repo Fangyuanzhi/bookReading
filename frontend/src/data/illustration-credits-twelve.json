@@ -1,0 +1,103 @@
+{
+  "note": "Public-domain artworks via Met Open Access API (isPublicDomain only).",
+  "cover": {
+    "file": "twelve.jpg",
+    "title": "Hercules chasing Avarice from the Temple of the Muses",
+    "artist": "Ugo da Carpi",
+    "year": "ca. 1520–27",
+    "source": "https://www.metmuseum.org/art/collection/search/337700"
+  },
+  "chapters": {
+    "1": {
+      "file": "c01.jpg",
+      "title": "Figure Studies after Rubens's \"The Fall of the Rebel Angels\"",
+      "artist": "Eugène Delacroix",
+      "year": "ca. 1820–22",
+      "source": "https://www.metmuseum.org/art/collection/search/355651"
+    },
+    "2": {
+      "file": "c02.jpg",
+      "title": "Alexander the Great (?)",
+      "artist": "",
+      "year": "ring: mid-16th century; cameo: early Hellenistic 4th century BCE",
+      "source": "https://www.metmuseum.org/art/collection/search/191486"
+    },
+    "3": {
+      "file": "c03.jpg",
+      "title": "A Dance in the Country",
+      "artist": "Giovanni Domenico Tiepolo",
+      "year": "ca. 1755",
+      "source": "https://www.metmuseum.org/art/collection/search/437812"
+    },
+    "4": {
+      "file": "c04.jpg",
+      "title": "Whalers",
+      "artist": "Joseph Mallord William Turner",
+      "year": "ca. 1845",
+      "source": "https://www.metmuseum.org/art/collection/search/437854"
+    },
+    "5": {
+      "file": "c05.jpg",
+      "title": "Folio from the \"Tashkent Qur'an\"",
+      "artist": "",
+      "year": "late 8th–early 9th century",
+      "source": "https://www.metmuseum.org/art/collection/search/454661"
+    },
+    "6": {
+      "file": "c06.jpg",
+      "title": "The Spanish Singer",
+      "artist": "Edouard Manet",
+      "year": "1860",
+      "source": "https://www.metmuseum.org/art/collection/search/436944"
+    },
+    "7": {
+      "file": "c07.jpg",
+      "title": "Christ's Descent into Hell",
+      "artist": "Hieronymus Bosch",
+      "year": "",
+      "source": "https://www.metmuseum.org/art/collection/search/435725"
+    },
+    "8": {
+      "file": "c08.jpg",
+      "title": "The Battle of Qoš-qulaq",
+      "artist": "Benoit Louis Prevost",
+      "year": "1774",
+      "source": "https://www.metmuseum.org/art/collection/search/715877"
+    },
+    "9": {
+      "file": "c09.jpg",
+      "title": "Napoleon Bonaparte (1769–1821)",
+      "artist": "French Painter",
+      "year": "",
+      "source": "https://www.metmuseum.org/art/collection/search/436408"
+    },
+    "10": {
+      "file": "c10.jpg",
+      "title": "Marble bust of a man",
+      "artist": "",
+      "year": "mid-1st century CE",
+      "source": "https://www.metmuseum.org/art/collection/search/248722"
+    },
+    "11": {
+      "file": "c11.jpg",
+      "title": "Napoléon III (1808–1873), Emperor of the French",
+      "artist": "Jean-Baptiste Carpeaux",
+      "year": "1873",
+      "source": "https://www.metmuseum.org/art/collection/search/205721"
+    },
+    "12": {
+      "file": "c12.jpg",
+      "title": "The Rehearsal of the Ballet Onstage",
+      "artist": "Edgar Degas",
+      "year": "ca. 1874",
+      "source": "https://www.metmuseum.org/art/collection/search/436155"
+    },
+    "13": {
+      "file": "c13.jpg",
+      "title": "The Louis XV Room",
+      "artist": "Jean-François Roumier",
+      "year": "ca. 1720–25, with later additions",
+      "source": "https://www.metmuseum.org/art/collection/search/189425"
+    }
+  }
+}

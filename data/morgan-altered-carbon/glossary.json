@@ -1,0 +1,21 @@
+{
+  "characters": {
+    "Takeshi Kovacs": "武·科瓦奇",
+    "Laurens Bancroft": "劳伦斯·班克罗夫特",
+    "Miriam Bancroft": "米里娅姆·班克罗夫特",
+    "Kristin Ortega": "克里斯汀·奥尔特加",
+    "Reileen Kawahara": "川原玲",
+    "Poe": "波"
+  },
+  "places": {
+    "Bay City": "湾城",
+    "Bancroft Tower": "班克罗夫特塔"
+  },
+  "terms": {
+    "stack": "阿尔科栈",
+    "sleeve": "壳",
+    "resleeve": "换壳",
+    "Envoy": "使者",
+    "VR": "虚拟实境"
+  }
+}

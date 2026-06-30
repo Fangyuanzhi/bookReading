@@ -1,0 +1,24 @@
+{
+  "characters": {
+    "Kalidasa": "卡里达萨",
+    "Vannevar Morgan": "万尼瓦尔·摩根",
+    "Princess": "公主",
+    "Bodhidharma": "菩提达摩",
+    "Starglider": "星驾者",
+    "CORA": "科拉",
+    "Great Thero": "大和尚",
+    "Ashoka": "阿育王"
+  },
+  "places": {
+    "Yakkagala": "耶迦加拉",
+    "Sri Kanda": "斯里坎达",
+    "Sri Lanka": "斯里兰卡",
+    "Ashoka Station": "阿育王站"
+  },
+  "terms": {
+    "space elevator": "太空电梯",
+    "hard dock": "硬对接",
+    "Spider": "蜘蛛机器人",
+    "synchronous orbit": "同步轨道"
+  }
+}

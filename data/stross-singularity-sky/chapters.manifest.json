@@ -1,0 +1,82 @@
+[
+  {
+    "idx": 1,
+    "filename": "01-序章.txt",
+    "title": "序章"
+  },
+  {
+    "idx": 2,
+    "filename": "02-风暴集结.txt",
+    "title": "风暴集结"
+  },
+  {
+    "idx": 3,
+    "filename": "03-出发准备.txt",
+    "title": "出发准备"
+  },
+  {
+    "idx": 4,
+    "filename": "04-类空视界.txt",
+    "title": "类空视界"
+  },
+  {
+    "idx": 5,
+    "filename": "05-舰队司令的人.txt",
+    "title": "舰队司令的人"
+  },
+  {
+    "idx": 6,
+    "filename": "06-狼库事件.txt",
+    "title": "狼库事件"
+  },
+  {
+    "idx": 7,
+    "filename": "07-死者的电报.txt",
+    "title": "死者的电报"
+  },
+  {
+    "idx": 8,
+    "filename": "08-符号战争.txt",
+    "title": "符号战争"
+  },
+  {
+    "idx": 9,
+    "filename": "09-忏悔.txt",
+    "title": "忏悔"
+  },
+  {
+    "idx": 10,
+    "filename": "10-外交行为.txt",
+    "title": "外交行为"
+  },
+  {
+    "idx": 11,
+    "filename": "11-处决邀请.txt",
+    "title": "处决邀请"
+  },
+  {
+    "idx": 12,
+    "filename": "12-死亡马戏团.txt",
+    "title": "死亡马戏团"
+  },
+  {
+    "idx": 13,
+    "filename": "13-弹跳者.txt",
+    "title": "弹跳者"
+  },
+  {
+    "idx": 14,
+    "filename": "14-鬼牌.txt",
+    "title": "鬼牌"
+  },
+  {
+    "idx": 15,
+    "filename": "15-电话修理工.txt",
+    "title": "电话修理工"
+  },
+  {
+    "idx": 16,
+    "filename": "16-递送服务.txt",
+    "title": "递送服务"
+  }
+]

@@ -24,6 +24,8 @@ export function useChapter(chapterId) {
   const [presence, setPresence] = useState({ count: 0, users: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [errorStatus, setErrorStatus] = useState(null);
+  const [paymentRequired, setPaymentRequired] = useState(null);
   const centrifugoRef = useRef(null);
 
   const reload = useCallback(async () => {
@@ -31,9 +33,9 @@ export function useChapter(chapterId) {
 
     const [chapterRes, notesRes, reviewsRes, presenceRes] = await Promise.all([
       api.chapters.detail(chapterId),
-      api.chapters.notes(chapterId),
-      api.chapters.reviews(chapterId),
-      api.chapters.presence(chapterId),
+      api.chapters.notes(chapterId).catch(() => ({ data: [] })),
+      api.chapters.reviews(chapterId).catch(() => ({ data: [] })),
+      api.chapters.presence(chapterId).catch(() => ({ data: { count: 0, users: [] } })),
     ]);
 
     const chapterData = chapterRes.data;
@@ -42,6 +44,8 @@ export function useChapter(chapterId) {
     setNotes(normalizeNotes(notesRes.data));
     setReviews(normalizeReviews(reviewsRes.data));
     setPresence(presenceRes.data || { count: 0, users: [] });
+    setError('');
+    setErrorStatus(null);
   }, [chapterId]);
 
   useEffect(() => {
@@ -55,6 +59,8 @@ export function useChapter(chapterId) {
       try {
         setLoading(true);
         setError('');
+        setErrorStatus(null);
+        setPaymentRequired(null);
         await reload();
         if (cancelled) return;
 
@@ -95,7 +101,18 @@ export function useChapter(chapterId) {
           }
         });
       } catch (err) {
-        if (!cancelled) setError(err.message || '加载失败');
+        if (!cancelled) {
+          if (err.status === 402 || err.code === 402) {
+            setPaymentRequired(err.data || { reason: 'payment_required' });
+            setError('');
+            setErrorStatus(null);
+          } else {
+            setError(err.message || '加载失败');
+            setErrorStatus(err.status || err.code || null);
+            setChapter(null);
+            setParagraphs([]);
+          }
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -184,6 +201,8 @@ export function useChapter(chapterId) {
     presence,
     loading,
     error,
+    errorStatus,
+    paymentRequired,
     reload,
     createNote,
     likeNote,

@@ -72,7 +72,12 @@ func (h *BookHandler) Get(c *gin.Context) {
 		return
 	}
 
-	book, err := h.bookService.GetBook(c.Request.Context(), id)
+	var viewerID uuid.UUID
+	if userIDStr, exists := c.Get("userID"); exists {
+		viewerID, _ = uuid.Parse(userIDStr.(string))
+	}
+
+	book, err := h.bookService.GetBookForUser(c.Request.Context(), id, viewerID)
 	if err != nil {
 		if errors.Is(err, service.ErrBookNotFound) {
 			response.NotFound(c, "book not found")
@@ -101,7 +106,7 @@ func (h *BookHandler) List(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "20"))
 	search := c.Query("search")
 
-	books, total, err := h.bookService.ListBooks(c.Request.Context(), page, pageSize, search)
+	books, total, err := h.bookService.ListBooks(c.Request.Context(), page, pageSize, search, c.Query("source"))
 	if err != nil {
 		response.InternalError(c, err.Error())
 		return
@@ -224,8 +229,17 @@ func (h *BookHandler) GetChapters(c *gin.Context) {
 		return
 	}
 
-	chapters, err := h.bookService.GetChaptersByBook(c.Request.Context(), bookID)
+	var viewerID uuid.UUID
+	if userIDStr, exists := c.Get("userID"); exists {
+		viewerID, _ = uuid.Parse(userIDStr.(string))
+	}
+
+	chapters, err := h.bookService.GetChaptersByBookForUser(c.Request.Context(), bookID, viewerID)
 	if err != nil {
+		if errors.Is(err, service.ErrBookNotFound) {
+			response.NotFound(c, "book not found")
+			return
+		}
 		response.InternalError(c, err.Error())
 		return
 	}
@@ -280,4 +294,102 @@ func (h *BookHandler) CreateChapters(c *gin.Context) {
 	}
 
 	response.Success(c, nil)
+}
+
+// ListMine 获取当前用户创建的书籍（含草稿）
+func (h *BookHandler) ListMine(c *gin.Context) {
+	userID, err := middleware.GetCurrentUserID(c)
+	if err != nil {
+		response.Unauthorized(c, err.Error())
+		return
+	}
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "20"))
+
+	books, total, err := h.bookService.ListMyBooks(c.Request.Context(), userID, page, pageSize)
+	if err != nil {
+		response.InternalError(c, err.Error())
+		return
+	}
+
+	response.Success(c, gin.H{
+		"books": books,
+		"total": total,
+		"page":  page,
+	})
+}
+
+// UpdateStatus 发布或撤回书籍
+func (h *BookHandler) UpdateStatus(c *gin.Context) {
+	userID, err := middleware.GetCurrentUserID(c)
+	if err != nil {
+		response.Unauthorized(c, err.Error())
+		return
+	}
+
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.BadRequest(c, "invalid book id")
+		return
+	}
+
+	var req service.UpdateBookStatusRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.BadRequest(c, "invalid request: "+err.Error())
+		return
+	}
+
+	book, err := h.bookService.UpdateBookStatus(c.Request.Context(), id, req.Status, userID)
+	if err != nil {
+		if errors.Is(err, service.ErrBookNotFound) {
+			response.NotFound(c, "book not found")
+			return
+		}
+		if errors.Is(err, service.ErrUnauthorized) {
+			response.Forbidden(c, "unauthorized")
+			return
+		}
+		response.BadRequest(c, err.Error())
+		return
+	}
+
+	response.Success(c, book)
+}
+
+// CreateSingleChapter 创建单个章节
+func (h *BookHandler) CreateSingleChapter(c *gin.Context) {
+	userID, err := middleware.GetCurrentUserID(c)
+	if err != nil {
+		response.Unauthorized(c, err.Error())
+		return
+	}
+
+	bookID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		response.BadRequest(c, "invalid book id")
+		return
+	}
+
+	var req service.CreateChapterRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.BadRequest(c, "invalid request: "+err.Error())
+		return
+	}
+
+	chapter, err := h.bookService.CreateSingleChapter(c.Request.Context(), bookID, &req, userID)
+	if err != nil {
+		if errors.Is(err, service.ErrBookNotFound) {
+			response.NotFound(c, "book not found")
+			return
+		}
+		if errors.Is(err, service.ErrUnauthorized) {
+			response.Forbidden(c, "unauthorized")
+			return
+		}
+		response.InternalError(c, err.Error())
+		return
+	}
+
+	response.Success(c, chapter)
 }

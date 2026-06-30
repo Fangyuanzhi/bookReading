@@ -3,7 +3,7 @@
  * 开发环境输出到 console；生产环境仅 warn/error
  */
 
-const PREFIX = '[陪读]';
+const PREFIX = '[读书会]';
 const isDev = import.meta.env.DEV;
 
 function formatMeta(meta) {

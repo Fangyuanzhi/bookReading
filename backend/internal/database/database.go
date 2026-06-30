@@ -58,11 +58,15 @@ func AutoMigrate() error {
 		&model.Review{},
 		&model.ReviewLike{},
 		&model.ReadingProgress{},
+		&model.ShelfItem{},
+		&model.UserFollow{},
 		&model.ReadingGroup{},
 		&model.GroupMember{},
+		&model.GroupPost{},
 		&model.Payment{},
 		&model.VIPSubscription{},
 		&model.UserBookPurchase{},
+		&model.Report{},
 	}
 
 	if err := db.AutoMigrate(models...); err != nil {

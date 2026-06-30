@@ -25,6 +25,15 @@ const (
 	BookStatusRemoved   BookStatus = "removed"
 )
 
+// BookAccessType 书籍访问类型（商业化）
+type BookAccessType string
+
+const (
+	BookAccessFree BookAccessType = "free" // 免费阅读
+	BookAccessVIP  BookAccessType = "vip"  // VIP 会员可读
+	BookAccessPaid BookAccessType = "paid" // 单本付费
+)
+
 // Book 书籍模型
 type Book struct {
 	ID          uuid.UUID      `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
@@ -35,6 +44,8 @@ type Book struct {
 	Language    string         `json:"language" gorm:"default:'zh';size:10"`
 	Source      BookSource     `json:"source" gorm:"default:'public_domain'"`
 	Status      BookStatus     `json:"status" gorm:"default:'published'"`
+	AccessType  BookAccessType `json:"access_type" gorm:"default:'free'"`
+	Price       int64          `json:"price" gorm:"default:0"` // 单本价格（分），仅 access_type=paid 时有效
 	EPUBPath    string         `json:"epub_path"`
 	LicenseNote string         `json:"license_note"`
 	CreatedBy   *uuid.UUID     `json:"created_by" gorm:"type:uuid;index"`

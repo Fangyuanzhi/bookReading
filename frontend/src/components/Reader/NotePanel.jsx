@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, MessageCircle, X } from 'lucide-react';
+import ReportButton from '../ReportButton';
 export default function NotePanel({
   theme,
   paragraphIndex,
@@ -76,9 +78,19 @@ export default function NotePanel({
           paraNotes.map((note) => (
             <div key={note.id} className="rounded-lg p-3" style={{ backgroundColor: theme.bgRaised || theme.line }}>
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-sm font-medium">
-                  {note.user?.display_name || note.user?.email || '读者'}
-                </span>
+                {note.user?.id ? (
+                  <Link
+                    to={`/users/${note.user.id}`}
+                    className="text-sm font-medium hover:underline"
+                    style={{ color: theme.accent }}
+                  >
+                    {note.user.display_name || note.user.email || '读者'}
+                  </Link>
+                ) : (
+                  <span className="text-sm font-medium">
+                    {note.user?.display_name || note.user?.email || '读者'}
+                  </span>
+                )}
                 <span className="text-xs opacity-50">
                   {note.created_at ? new Date(note.created_at).toLocaleString('zh-CN') : ''}
                 </span>
@@ -97,6 +109,12 @@ export default function NotePanel({
                   <MessageCircle size={14} />
                   段评
                 </span>
+                <ReportButton
+                  targetType="note"
+                  targetId={note.id}
+                  label="举报"
+                  variant="ghost"
+                />
               </div>
             </div>
           ))

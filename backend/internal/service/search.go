@@ -93,7 +93,7 @@ func (s *SearchService) Search(ctx context.Context, req *SearchRequest) (*Search
 // searchBooks 搜索书籍
 func (s *SearchService) searchBooks(ctx context.Context, req *SearchRequest) ([]model.Book, int64, error) {
 	offset := (req.Page - 1) * req.PageSize
-	return s.bookRepo.List(ctx, offset, req.PageSize, req.Query)
+	return s.bookRepo.List(ctx, offset, req.PageSize, req.Query, "")
 }
 
 // searchNotes 搜索段评
@@ -111,7 +111,7 @@ func (s *SearchService) searchReviews(ctx context.Context, req *SearchRequest) (
 func (s *SearchService) SearchBooksInShelf(ctx context.Context, userID uuid.UUID, query string) ([]model.Book, error) {
 	// 获取用户的阅读进度，然后搜索相关书籍
 	// 简化实现
-	books, _, err := s.bookRepo.List(ctx, 0, 100, query)
+	books, _, err := s.bookRepo.List(ctx, 0, 100, query, "")
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (s *SearchService) GetHotBooks(ctx context.Context, limit int) ([]model.Boo
 		limit = 10
 	}
 	// 简化实现，按创建时间排序
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func (s *SearchService) GetNewBooks(ctx context.Context, limit int) ([]model.Boo
 	if limit < 1 || limit > 50 {
 		limit = 10
 	}
-	books, _, err := s.bookRepo.List(ctx, 0, limit, "")
+	books, _, err := s.bookRepo.List(ctx, 0, limit, "", "")
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ func (s *SearchService) Suggest(ctx context.Context, query string, limit int) ([
 	}
 
 	// 简化实现，返回相关书籍标题
-	books, _, err := s.bookRepo.List(ctx, 0, limit, query)
+	books, _, err := s.bookRepo.List(ctx, 0, limit, query, "")
 	if err != nil {
 		return nil, err
 	}

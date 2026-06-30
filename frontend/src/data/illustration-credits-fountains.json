@@ -1,0 +1,61 @@
+{
+  "note": "Public-domain artworks via Met Open Access API (isPublicDomain only).",
+  "cover": {
+    "file": "fountains.jpg",
+    "title": "Heart of the Andes",
+    "artist": "Frederic Edwin Church",
+    "year": "1859",
+    "source": "https://www.metmuseum.org/art/collection/search/10481"
+  },
+  "chapters": {
+    "1": {
+      "file": "c01.jpg",
+      "title": "The Aegean Sea",
+      "artist": "Frederic Edwin Church",
+      "year": "ca. 1877",
+      "source": "https://www.metmuseum.org/art/collection/search/10480"
+    },
+    "2": {
+      "file": "c02.jpg",
+      "title": "Damascus Room",
+      "artist": "",
+      "year": "dated 1119 AH/1707 CE",
+      "source": "https://www.metmuseum.org/art/collection/search/452102"
+    },
+    "3": {
+      "file": "c03.jpg",
+      "title": "Buddha Expounding the Dharma",
+      "artist": "",
+      "year": "late 8th century",
+      "source": "https://www.metmuseum.org/art/collection/search/74832"
+    },
+    "4": {
+      "file": "c04.jpg",
+      "title": "Longcase astronomical regulator",
+      "artist": "Ferdinand Berthoud",
+      "year": "ca. 1768–70",
+      "source": "https://www.metmuseum.org/art/collection/search/206965"
+    },
+    "5": {
+      "file": "c05.jpg",
+      "title": "Salisbury Cathedral from the Bishop's Grounds",
+      "artist": "John Constable",
+      "year": "ca. 1825",
+      "source": "https://www.metmuseum.org/art/collection/search/435922"
+    },
+    "6": {
+      "file": "c06.jpg",
+      "title": "Apollo and Aurora",
+      "artist": "Gerard de Lairesse",
+      "year": "1671",
+      "source": "https://www.metmuseum.org/art/collection/search/436843"
+    },
+    "7": {
+      "file": "c07.jpg",
+      "title": "The Forest in Winter at Sunset",
+      "artist": "Théodore Rousseau",
+      "year": "ca. 1846–67",
+      "source": "https://www.metmuseum.org/art/collection/search/438816"
+    }
+  }
+}

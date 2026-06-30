@@ -122,6 +122,77 @@ func (r *NoteRepository) DecrementLikes(ctx context.Context, noteID uuid.UUID) e
 	return r.db.WithContext(ctx).Model(&model.Note{}).Where("id = ?", noteID).UpdateColumn("likes", gorm.Expr("likes - 1")).Error
 }
 
+// SumLikesByUser 统计用户段评收到的总点亮数
+func (r *NoteRepository) SumLikesByUser(ctx context.Context, userID uuid.UUID) (int64, error) {
+	var total int64
+	err := r.db.WithContext(ctx).Model(&model.Note{}).
+		Where("user_id = ?", userID).
+		Select("COALESCE(SUM(likes), 0)").
+		Scan(&total).Error
+	return total, err
+}
+
+// CountPublicByUser 统计用户公开段评数（仅已发布书籍）
+func (r *NoteRepository) CountPublicByUser(ctx context.Context, userID uuid.UUID) (int64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&model.Note{}).
+		Joins("JOIN books ON books.id = notes.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("notes.user_id = ? AND notes.is_public = ?", userID, true).
+		Count(&count).Error
+	return count, err
+}
+
+// ListPublicByUser 获取用户公开段评（仅已发布书籍）
+func (r *NoteRepository) ListPublicByUser(ctx context.Context, userID uuid.UUID, offset, limit int) ([]model.Note, error) {
+	var notes []model.Note
+	err := r.db.WithContext(ctx).
+		Preload("Book").
+		Joins("JOIN books ON books.id = notes.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("notes.user_id = ? AND notes.is_public = ?", userID, true).
+		Order("notes.created_at DESC").
+		Offset(offset).
+		Limit(limit).
+		Find(&notes).Error
+	return notes, err
+}
+
+// ListRecentByUserIDs 获取关注用户的最新公开段评
+func (r *NoteRepository) ListRecentByUserIDs(ctx context.Context, userIDs []uuid.UUID, limit int) ([]model.Note, error) {
+	if len(userIDs) == 0 {
+		return []model.Note{}, nil
+	}
+	if limit < 1 || limit > 100 {
+		limit = 30
+	}
+	var notes []model.Note
+	err := r.db.WithContext(ctx).
+		Preload("User").
+		Preload("Book").
+		Joins("JOIN books ON books.id = notes.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("notes.user_id IN ? AND notes.is_public = ?", userIDs, true).
+		Order("notes.created_at DESC").
+		Limit(limit).
+		Find(&notes).Error
+	return notes, err
+}
+
+// ListHot 热门公开段评（按点亮数）
+func (r *NoteRepository) ListHot(ctx context.Context, limit int) ([]model.Note, error) {
+	if limit < 1 || limit > 50 {
+		limit = 10
+	}
+	var notes []model.Note
+	err := r.db.WithContext(ctx).
+		Preload("User").
+		Preload("Book").
+		Joins("JOIN books ON books.id = notes.book_id AND books.status = ? AND books.deleted_at IS NULL", model.BookStatusPublished).
+		Where("notes.is_public = ?", true).
+		Order("notes.likes DESC, notes.created_at DESC").
+		Limit(limit).
+		Find(&notes).Error
+	return notes, err
+}
+
 // Search 搜索段评
 func (r *NoteRepository) Search(ctx context.Context, query string, page, pageSize int) ([]model.Note, int64, error) {
 	var notes []model.Note

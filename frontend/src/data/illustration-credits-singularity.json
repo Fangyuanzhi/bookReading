@@ -1,0 +1,124 @@
+{
+  "note": "Public-domain artworks via Met Open Access API.",
+  "cover": {
+    "file": "singularity.jpg",
+    "title": "Celestial globe with clockwork",
+    "artist": "Gerhard Emmoser",
+    "year": "1579",
+    "source": "https://www.metmuseum.org/art/collection/search/193606"
+  },
+  "chapters": {
+    "1": {
+      "file": "c01.jpg",
+      "title": "[Solar Eclipse from Caroline Island]",
+      "artist": "H. A. Lawrence",
+      "year": "May 6, 1883",
+      "source": "https://www.metmuseum.org/art/collection/search/786870"
+    },
+    "2": {
+      "file": "c02.jpg",
+      "title": "Eclipse of the Sun",
+      "artist": "W. & F. Langenheim",
+      "year": "1854",
+      "source": "https://www.metmuseum.org/art/collection/search/283180"
+    },
+    "3": {
+      "file": "c03.jpg",
+      "title": "The Molo, Venice, from the Bacino di San Marco",
+      "artist": "Luca Carlevaris",
+      "year": "ca. 1709",
+      "source": "https://www.metmuseum.org/art/collection/search/459029"
+    },
+    "4": {
+      "file": "c04.jpg",
+      "title": "Blind Orion Searching for the Rising Sun",
+      "artist": "Nicolas Poussin",
+      "year": "1658",
+      "source": "https://www.metmuseum.org/art/collection/search/437326"
+    },
+    "5": {
+      "file": "c05.jpg",
+      "title": "Longcase astronomical regulator",
+      "artist": "Ferdinand Berthoud",
+      "year": "ca. 1768–70",
+      "source": "https://www.metmuseum.org/art/collection/search/206965"
+    },
+    "6": {
+      "file": "c06.jpg",
+      "title": "Marble statue of a wounded warrior",
+      "artist": "",
+      "year": "ca. 138–181 CE",
+      "source": "https://www.metmuseum.org/art/collection/search/251929"
+    },
+    "7": {
+      "file": "c07.jpg",
+      "title": "A View of the Present Seat of War, at and Near New York, in An Astronomical Diary; or, Almanack for the year of Christian Æra, 1777",
+      "artist": "Nathaniel Low",
+      "year": "1776",
+      "source": "https://www.metmuseum.org/art/collection/search/889523"
+    },
+    "8": {
+      "file": "c08.jpg",
+      "title": "Bowl with Courtly and Astrological Motifs",
+      "artist": "",
+      "year": "late 12th–early 13th century",
+      "source": "https://www.metmuseum.org/art/collection/search/451379"
+    },
+    "9": {
+      "file": "c09.jpg",
+      "title": "Apollo and Aurora",
+      "artist": "Gerard de Lairesse",
+      "year": "1671",
+      "source": "https://www.metmuseum.org/art/collection/search/436843"
+    },
+    "10": {
+      "file": "c10.jpg",
+      "title": "Allegory of the Planets and Continents",
+      "artist": "Giovanni Battista Tiepolo",
+      "year": "1752",
+      "source": "https://www.metmuseum.org/art/collection/search/437790"
+    },
+    "11": {
+      "file": "c11.jpg",
+      "title": "Horses Harnessed to a Chariot",
+      "artist": "",
+      "year": "ca. 1353–1336 B.C.",
+      "source": "https://www.metmuseum.org/art/collection/search/544062"
+    },
+    "12": {
+      "file": "c12.jpg",
+      "title": "The Storm",
+      "artist": "Pierre-Auguste Cot",
+      "year": "1880",
+      "source": "https://www.metmuseum.org/art/collection/search/435997"
+    },
+    "13": {
+      "file": "c13.jpg",
+      "title": "Jupiter, from \"The Seven Planets\"",
+      "artist": "Heinrich Aldegrever",
+      "year": "1533",
+      "source": "https://www.metmuseum.org/art/collection/search/428401"
+    },
+    "14": {
+      "file": "c14.jpg",
+      "title": "Basin with Zodiac Signs and Royal Titles",
+      "artist": "",
+      "year": "late 13th–early 14th century",
+      "source": "https://www.metmuseum.org/art/collection/search/444553"
+    },
+    "15": {
+      "file": "c15.jpg",
+      "title": "Clock watch with astronomical dial and sundial",
+      "artist": "Jan Jansen Bockeltz",
+      "year": "ca. 1605–10",
+      "source": "https://www.metmuseum.org/art/collection/search/194191"
+    },
+    "16": {
+      "file": "c16.jpg",
+      "title": "The Family Christian Almanac for the United States, for the year of our Lord and Savior Jesus Christ, 1867",
+      "artist": "Samuel Hart Wright",
+      "year": "1866",
+      "source": "https://www.metmuseum.org/art/collection/search/724720"
+    }
+  }
+}

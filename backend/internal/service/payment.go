@@ -11,11 +11,17 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	VIPMonthlyPriceCents = 1990 // ¥19.9/月
+)
+
 var (
-	ErrPaymentNotFound   = errors.New("payment not found")
-	ErrPaymentAlreadyPaid = errors.New("payment already paid")
-	ErrPaymentExpired    = errors.New("payment expired")
-	ErrInsufficientBalance = errors.New("insufficient balance")
+	ErrPaymentNotFound      = errors.New("payment not found")
+	ErrPaymentAlreadyPaid   = errors.New("payment already paid")
+	ErrPaymentExpired       = errors.New("payment expired")
+	ErrInsufficientBalance  = errors.New("insufficient balance")
+	ErrPaymentUnauthorized  = errors.New("payment unauthorized")
+	ErrInvalidPaymentAmount = errors.New("invalid payment amount")
 )
 
 // PaymentService 支付服务
@@ -32,6 +38,29 @@ func NewPaymentService(paymentRepo *repository.PaymentRepository, bookRepo *repo
 	}
 }
 
+// PricingPlan 定价方案
+type PricingPlan struct {
+	Type        model.PaymentType `json:"type"`
+	Amount      int64             `json:"amount"`
+	Label       string            `json:"label"`
+	Description string            `json:"description"`
+}
+
+// PricingResponse 定价信息
+type PricingResponse struct {
+	VIPMonthly PricingPlan `json:"vip_monthly"`
+	Providers  []string    `json:"providers"`
+}
+
+// BookAccessInfo 书籍访问信息
+type BookAccessInfo struct {
+	BookID     string             `json:"book_id"`
+	AccessType model.BookAccessType `json:"access_type"`
+	Price      int64              `json:"price"`
+	HasAccess  bool               `json:"has_access"`
+	Reason     string             `json:"reason,omitempty"`
+}
+
 // CreatePaymentRequest 创建支付请求
 type CreatePaymentRequest struct {
 	Type        model.PaymentType `json:"type" validate:"required"`
@@ -40,25 +69,41 @@ type CreatePaymentRequest struct {
 	Description string            `json:"description"`
 	BookID      *string           `json:"book_id,omitempty"`
 	ChapterID   *string           `json:"chapter_id,omitempty"`
-	Provider    string            `json:"provider" validate:"required,oneof=alipay wechat"`
+	Provider    string            `json:"provider" validate:"required,oneof=mock alipay wechat"`
 }
 
 // PaymentResponse 支付响应
 type PaymentResponse struct {
 	PaymentID       string `json:"payment_id"`
 	ProviderOrderID string `json:"provider_order_id"`
-	PayURL          string `json:"pay_url"` // 支付跳转链接
-	ExpireAt        int64  `json:"expire_at"` // 过期时间戳
+	PayURL          string `json:"pay_url"`
+	ExpireAt        int64  `json:"expire_at"`
+	Provider        string `json:"provider"`
+}
+
+// GetPricing 获取定价方案
+func (s *PaymentService) GetPricing() *PricingResponse {
+	return &PricingResponse{
+		VIPMonthly: PricingPlan{
+			Type:        model.PaymentTypeVIP,
+			Amount:      VIPMonthlyPriceCents,
+			Label:       "读书会 VIP 月卡",
+			Description: "畅读全部 VIP 专区作品，专属标识",
+		},
+		Providers: []string{"mock", "alipay", "wechat"},
+	}
 }
 
 // CreatePayment 创建支付订单
 func (s *PaymentService) CreatePayment(ctx context.Context, req *CreatePaymentRequest, userID uuid.UUID) (*PaymentResponse, error) {
-	// 验证金额
-	if req.Amount <= 0 {
-		return nil, errors.New("invalid amount")
+	expected, err := s.expectedAmount(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if req.Amount != expected {
+		return nil, ErrInvalidPaymentAmount
 	}
 
-	// 创建支付记录
 	payment := &model.Payment{
 		UserID:      userID,
 		Type:        req.Type,
@@ -86,7 +131,6 @@ func (s *PaymentService) CreatePayment(ctx context.Context, req *CreatePaymentRe
 		payment.ChapterID = &chapterID
 	}
 
-	// 设置过期时间（30分钟）
 	expireAt := time.Now().Add(30 * time.Minute)
 	payment.ExpiredAt = &expireAt
 
@@ -94,24 +138,80 @@ func (s *PaymentService) CreatePayment(ctx context.Context, req *CreatePaymentRe
 		return nil, err
 	}
 
-	// 生成第三方支付订单号（模拟）
 	providerOrderID := fmt.Sprintf("%s_%s", req.Provider, payment.ID.String()[:8])
 	payment.ProviderOrderID = providerOrderID
 
-	// 更新支付记录
 	if err := s.paymentRepo.Update(ctx, payment); err != nil {
 		return nil, err
 	}
 
-	// 生成支付链接（模拟）
-	payURL := fmt.Sprintf("https://example.com/pay/%s?order=%s", req.Provider, providerOrderID)
+	payURL := fmt.Sprintf("/vip?pay=%s", payment.ID.String())
+	if req.Provider != "mock" {
+		payURL = fmt.Sprintf("https://example.com/pay/%s?order=%s", req.Provider, providerOrderID)
+	}
 
 	return &PaymentResponse{
 		PaymentID:       payment.ID.String(),
 		ProviderOrderID: providerOrderID,
 		PayURL:          payURL,
 		ExpireAt:        expireAt.Unix(),
+		Provider:        req.Provider,
 	}, nil
+}
+
+func (s *PaymentService) expectedAmount(ctx context.Context, req *CreatePaymentRequest) (int64, error) {
+	switch req.Type {
+	case model.PaymentTypeVIP:
+		return VIPMonthlyPriceCents, nil
+	case model.PaymentTypeBook:
+		if req.BookID == nil {
+			return 0, errors.New("book_id required")
+		}
+		bookID, err := uuid.Parse(*req.BookID)
+		if err != nil {
+			return 0, err
+		}
+		book, err := s.bookRepo.GetByID(ctx, bookID)
+		if err != nil {
+			return 0, err
+		}
+		if book.AccessType != model.BookAccessPaid || book.Price <= 0 {
+			return 0, errors.New("book is not for sale")
+		}
+		return book.Price, nil
+	default:
+		return req.Amount, nil
+	}
+}
+
+// ConfirmPayment 模拟支付确认（开发/演示用）
+func (s *PaymentService) ConfirmPayment(ctx context.Context, paymentID, userID uuid.UUID) (*model.Payment, error) {
+	payment, err := s.paymentRepo.GetByID(ctx, paymentID)
+	if err != nil {
+		return nil, err
+	}
+	if payment.UserID != userID {
+		return nil, ErrPaymentUnauthorized
+	}
+	if payment.Provider != "mock" {
+		return nil, errors.New("only mock payments can be confirmed directly")
+	}
+	if payment.IsPaid() {
+		return payment, nil
+	}
+	if payment.ExpiredAt != nil && time.Now().After(*payment.ExpiredAt) {
+		payment.Status = model.PaymentStatusCancelled
+		_ = s.paymentRepo.Update(ctx, payment)
+		return nil, ErrPaymentExpired
+	}
+
+	if err := s.ProcessPaymentCallback(ctx, payment.Provider, payment.ProviderOrderID, true); err != nil {
+		if errors.Is(err, ErrPaymentAlreadyPaid) {
+			return s.paymentRepo.GetByID(ctx, paymentID)
+		}
+		return nil, err
+	}
+	return s.paymentRepo.GetByID(ctx, paymentID)
 }
 
 // ProcessPaymentCallback 处理支付回调
@@ -121,13 +221,11 @@ func (s *PaymentService) ProcessPaymentCallback(ctx context.Context, provider, p
 		return err
 	}
 
-	// 检查是否已过期
 	if payment.ExpiredAt != nil && time.Now().After(*payment.ExpiredAt) {
 		payment.Status = model.PaymentStatusCancelled
 		return s.paymentRepo.Update(ctx, payment)
 	}
 
-	// 检查是否已支付
 	if payment.IsPaid() {
 		return ErrPaymentAlreadyPaid
 	}
@@ -137,7 +235,6 @@ func (s *PaymentService) ProcessPaymentCallback(ctx context.Context, provider, p
 		payment.Status = model.PaymentStatusPaid
 		payment.PaidAt = &now
 
-		// 处理购买逻辑
 		if err := s.processPurchase(ctx, payment); err != nil {
 			return err
 		}
@@ -148,7 +245,6 @@ func (s *PaymentService) ProcessPaymentCallback(ctx context.Context, provider, p
 	return s.paymentRepo.Update(ctx, payment)
 }
 
-// processPurchase 处理购买逻辑
 func (s *PaymentService) processPurchase(ctx context.Context, payment *model.Payment) error {
 	switch payment.Type {
 	case model.PaymentTypeBook:
@@ -163,9 +259,18 @@ func (s *PaymentService) processPurchase(ctx context.Context, payment *model.Pay
 			}
 		}
 	case model.PaymentTypeVIP:
-		// 创建VIP订阅
 		now := time.Now()
-		endAt := now.AddDate(0, 1, 0) // 1个月
+		endAt := now.AddDate(0, 1, 0)
+		existing, err := s.paymentRepo.GetVIPSubscription(ctx, payment.UserID)
+		if err != nil {
+			return err
+		}
+		if existing != nil && existing.IsValid() {
+			endAt = existing.EndAt.AddDate(0, 1, 0)
+			existing.EndAt = endAt
+			existing.IsActive = true
+			return s.paymentRepo.UpdateVIPSubscription(ctx, existing)
+		}
 		sub := &model.VIPSubscription{
 			UserID:   payment.UserID,
 			Level:    1,
@@ -173,9 +278,7 @@ func (s *PaymentService) processPurchase(ctx context.Context, payment *model.Pay
 			EndAt:    endAt,
 			IsActive: true,
 		}
-		if err := s.paymentRepo.CreateVIPSubscription(ctx, sub); err != nil {
-			return err
-		}
+		return s.paymentRepo.CreateVIPSubscription(ctx, sub)
 	}
 	return nil
 }
@@ -195,25 +298,69 @@ func (s *PaymentService) CheckUserVIP(ctx context.Context, userID uuid.UUID) (*m
 	return s.paymentRepo.GetVIPSubscription(ctx, userID)
 }
 
-// CheckUserBookAccess 检查用户是否有书籍访问权限
+// CheckUserBookAccess 检查用户是否有书籍阅读权限
 func (s *PaymentService) CheckUserBookAccess(ctx context.Context, userID, bookID uuid.UUID) (bool, error) {
-	// 检查是否已购买
-	purchased, err := s.paymentRepo.HasUserPurchasedBook(ctx, userID, bookID)
+	info, err := s.GetBookAccessInfo(ctx, userID, bookID)
 	if err != nil {
 		return false, err
 	}
-	if purchased {
-		return true, nil
-	}
+	return info.HasAccess, nil
+}
 
-	// 检查是否是VIP
-	vip, err := s.paymentRepo.GetVIPSubscription(ctx, userID)
+// GetBookAccessInfo 获取书籍访问详情
+func (s *PaymentService) GetBookAccessInfo(ctx context.Context, userID, bookID uuid.UUID) (*BookAccessInfo, error) {
+	book, err := s.bookRepo.GetByID(ctx, bookID)
 	if err != nil {
-		return false, err
-	}
-	if vip != nil && vip.IsValid() {
-		return true, nil
+		return nil, err
 	}
 
-	return false, nil
+	info := &BookAccessInfo{
+		BookID:     bookID.String(),
+		AccessType: book.AccessType,
+		Price:      book.Price,
+		HasAccess:  true,
+	}
+
+	if book.AccessType == "" || book.AccessType == model.BookAccessFree {
+		info.AccessType = model.BookAccessFree
+		return info, nil
+	}
+
+	if book.CreatedBy != nil && userID != uuid.Nil && *book.CreatedBy == userID {
+		return info, nil
+	}
+
+	switch book.AccessType {
+	case model.BookAccessVIP:
+		vip, err := s.paymentRepo.GetVIPSubscription(ctx, userID)
+		if err != nil {
+			return nil, err
+		}
+		if vip != nil && vip.IsValid() {
+			return info, nil
+		}
+		info.HasAccess = false
+		info.Reason = "vip_required"
+	case model.BookAccessPaid:
+		purchased, err := s.paymentRepo.HasUserPurchasedBook(ctx, userID, bookID)
+		if err != nil {
+			return nil, err
+		}
+		if purchased {
+			return info, nil
+		}
+		vip, err := s.paymentRepo.GetVIPSubscription(ctx, userID)
+		if err != nil {
+			return nil, err
+		}
+		if vip != nil && vip.IsValid() {
+			return info, nil
+		}
+		info.HasAccess = false
+		info.Reason = "purchase_required"
+	default:
+		return info, nil
+	}
+
+	return info, nil
 }
